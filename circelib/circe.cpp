@@ -53,7 +53,7 @@ Author:
 #include "files.h"
 #include "pt4d.h"
 #ifdef WITH_GDAL
-#include "../dependances/gdal/circe_ogr.h"
+#include "gdal/circe_ogr.h"
 #endif
 #include "tinyxml2/tinyxml2.h"
 #include "conversioncore.h"

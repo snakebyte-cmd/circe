@@ -24,10 +24,17 @@ Release:win32:CONFIG += QMAKE_WITH_GDAL
 #INCLUDEPATH += ../tinyxml2-master
 
 QMAKE_WITH_GDAL {
-unix:INCLUDEPATH += /usr/include/gdal
-unix:LIBS += "/usr/lib/libgdal.so"
-unix:SOURCES += ../../circelib/gdal/circe_ogr.cpp
-unix:HEADERS += ../../circelib/gdal/circe_ogr.h
+unix {
+    !isEmpty($$system(which gdal-config)) {
+        INCLUDEPATH += $$system(gdal-config --cflags)
+        LIBS += $$system(gdal-config --libs)
+    } else {
+        INCLUDEPATH += /usr/include/gdal
+        LIBS += "/usr/lib/libgdal.so"
+    }
+    SOURCES += ../../circelib/gdal/circe_ogr.cpp
+    HEADERS += ../../circelib/gdal/circe_ogr.h
+}
 win32:INCLUDEPATH += ../../circelib/gdal/include
 win32:LIBS += ../../circelib/gdal/gdal.lib
 win32:SOURCES += ../../circelib/gdal/circe_ogr.cpp
