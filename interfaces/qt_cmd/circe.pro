@@ -30,8 +30,9 @@ QMAKE_WITH_GDAL {
 unix {
     GDAL_CONFIG = $$system(which gdal-config 2>/dev/null)
     !isEmpty(GDAL_CONFIG) {
-        INCLUDEPATH += $$system($$GDAL_CONFIG --cflags)
-        LIBS += $$system($$GDAL_CONFIG --libs)
+        GDAL_PREFIX = $$system($$GDAL_CONFIG --prefix)
+        INCLUDEPATH += $$GDAL_PREFIX/include
+        LIBS += -L$$GDAL_PREFIX/lib -lgdal
     } else {
         INCLUDEPATH += /usr/include/gdal
         LIBS += "/usr/lib/libgdal.so"
