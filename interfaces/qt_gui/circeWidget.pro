@@ -25,9 +25,10 @@ Release:win32:CONFIG += QMAKE_WITH_GDAL
 
 QMAKE_WITH_GDAL {
 unix {
-    !isEmpty($$system(which gdal-config)) {
-        INCLUDEPATH += $$system(gdal-config --cflags)
-        LIBS += $$system(gdal-config --libs)
+    GDAL_CONFIG = $$system(which gdal-config 2>/dev/null)
+    !isEmpty(GDAL_CONFIG) {
+        INCLUDEPATH += $$system($$GDAL_CONFIG --cflags)
+        LIBS += $$system($$GDAL_CONFIG --libs)
     } else {
         INCLUDEPATH += /usr/include/gdal
         LIBS += "/usr/lib/libgdal.so"
