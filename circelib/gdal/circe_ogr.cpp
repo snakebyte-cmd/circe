@@ -108,7 +108,7 @@ void processOGRdataSource(circeOptions circopt, GeodeticSet* GS)
         //    std::string fileName = dirName+"10m-geography-marine-polys/ne_10m_geography_marine_polys.shp";
         std::string fileName = circopt.sourceOptions.pathname;
 
-        OGRDataSource *poDSin = OGRSFDriverRegistrar::Open( fileName.data(), FALSE );
+        OGRDataSource *poDSin = (OGRDataSource*) GDALOpenEx( fileName.data(), GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, NULL, NULL );
         if( poDSin == NULL )
         {
             message = ErrorMessageText[EM_CANNOT_OPEN]+"\n"+fileName;
@@ -164,12 +164,13 @@ void processOGRdataSource(circeOptions circopt, GeodeticSet* GS)
             }
         }
 
-        OGRSFDriver *poDriver;
+        GDALDriver *poDriver;
 
-        for(int i = 0; i < OGRSFDriverRegistrar::GetRegistrar()->GetDriverCount(); i++)
-            writeLog(&fo, OGRSFDriverRegistrar::GetRegistrar()->GetDriver(i)->GetName());
+        GDALDriverManager *poMgr = GetGDALDriverManager();
+        for(int i = 0; i < poMgr->GetDriverCount(); i++)
+            writeLog(&fo, poMgr->GetDriver(i)->GetDescription());
 
-        poDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(driverName.c_str());
+        poDriver = poMgr->GetDriverByName(driverName.c_str());
         if (poDriver == NULL)
         {
             message = driverName+std::string(": ")+ErrorMessageText[EM_BAD_TARGET_FILE_EXTENSION];
@@ -177,7 +178,7 @@ void processOGRdataSource(circeOptions circopt, GeodeticSet* GS)
             throw std::string(message);
         }
 
-        OGRDataSource *poDSout = poDriver->CreateDataSource( fileNameOut.data(), NULL );
+        OGRDataSource *poDSout = (OGRDataSource*) poDriver->Create( fileNameOut.data(), 0, 0, 0, GDT_Unknown, NULL );
         if( poDSout == NULL )
         {
             message = ErrorMessageText[EM_TARGET_FILE_CREATION_FAILED];

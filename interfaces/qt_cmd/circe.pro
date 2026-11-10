@@ -33,6 +33,7 @@ unix {
         GDAL_PREFIX = $$system($$GDAL_CONFIG --prefix)
         INCLUDEPATH += $$GDAL_PREFIX/include
         LIBS += -L$$GDAL_PREFIX/lib -lgdal
+        unix:QMAKE_LFLAGS += -Wl,-rpath,$$GDAL_PREFIX/lib
     } else {
         INCLUDEPATH += /usr/include/gdal
         LIBS += "/usr/lib/libgdal.so"
