@@ -319,13 +319,15 @@ gpg --armor --export "$KEYID" > ~/.ssh/cle-gpg-pub.asc   # fichier propre pour u
 
 Note : pour le badge « Verified », l'email de la clé GPG doit être un email **vérifié** du compte GitHub.
 
-### 7.3 Créer le dépôt et pousser
+### 7.3 Forker et pousser
 
 ```sh
-# sur github.com : New repository "circe" (vide, sans README/LICENSE auto)
+# sur github.com/IGNF/circe : bouton "Fork" -> compte snakebyte-cmd
+#   => crée github.com/snakebyte-cmd/circe (historique upstream conservé)
 git remote add github git@github.com:snakebyte-cmd/circe.git   # déjà fait ici
-git push -u github local-macos-gdal    # branche de travail (patchs + doc + scripts)
-git push github main                   # branche principale, si souhaitée
+git ls-remote github                                          # vérifier que le fork répond (SSH OK)
+git push -u github local-macos-gdal    # branche de travail (patchs + doc + scripts, signés GPG)
+# main n'a pas besoin d'être poussée : le fork l'a déjà (même commit que upstream)
 ```
 
 Alternative sans SSH : remote HTTPS + Personal Access Token (Settings > Developer settings).
