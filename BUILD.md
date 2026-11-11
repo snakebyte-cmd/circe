@@ -79,6 +79,15 @@ brew install miniforge                   # conda = /opt/homebrew/bin/conda
 
 ### 4.2 Compiler (depuis la racine du clone)
 
+Tout en une commande (rebuild complet + préparation des `.app`) :
+
+```sh
+./scripts/build-macos.sh
+```
+
+Ce script compile les 4 cibles (CLI/GUI × avec/sans GDAL) dans `build/`, puis copie
+les plugins Qt dans chaque `.app` et re-signe le bundle (voir §4.4). Équivalent manuel :
+
 ```sh
 export PATH=/opt/homebrew/opt/qt@5/bin:/opt/homebrew/Caskroom/miniforge/base/envs/gdal/bin:$PATH
 
@@ -132,7 +141,8 @@ Résultats obtenus : conformes (point et fichier GeoJSON, précision < 5 cm).
 ### 4.4 Lancer la GUI sur macOS (Gatekeeper + plugins Qt)
 
 `make` ne déploie pas les plugins Qt dans le `.app` et laisse une signature ad-hoc
-incomplète → macOS affiche « impossible d'ouvrir ». Corriger :
+incomplète → macOS affiche « impossible d'ouvrir ». `scripts/build-macos.sh` corrige
+ça automatiquement (copie des plugins + `codesign --force --deep -s -`). En manuel :
 
 ```sh
 export PATH=/opt/homebrew/opt/qt@5/bin:$PATH
@@ -142,7 +152,7 @@ for APP in build/qt_gui/circeWidget.app build/qt_gui_gdal/circeWidget.app; do
   cp /opt/homebrew/opt/qt@5/plugins/platforms/libqcocoa.dylib PlugIns/platforms/
   cp /opt/homebrew/opt/qt@5/plugins/imageformats/*.dylib PlugIns/imageformats/
   cp /opt/homebrew/opt/qt@5/plugins/styles/*.dylib PlugIns/styles/
-  codesign --force --deep -s - "../.."/"$(basename $APP)"   # re-signe le bundle (scelle les ressources)
+  codesign --force --deep -s - "$OLDPWD/$APP"
   cd - >/dev/null
 done
 ```
