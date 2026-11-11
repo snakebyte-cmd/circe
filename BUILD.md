@@ -300,7 +300,7 @@ ssh -T git@github.com                # -> "Hi <user>! You've successfully authen
 brew install gnupg
 export PATH=/opt/homebrew/bin:$PATH
 gpg --batch --pinentry-mode loopback --passphrase '' \
-    --quick-gen-key 'Snake Byte <snakebyte@nestedshell.local>' rsa4096 sign never
+    --quick-gen-key 'Snake Byte <trinbash@proton.me>' rsa4096 sign never
 KEYID=$(gpg --list-secret-keys --with-colons | awk -F: '/^sec/{print $5; exit}')
 git config --global user.signingkey "$KEYID"
 git config --global commit.gpgsign true
