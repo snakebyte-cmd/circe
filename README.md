@@ -2,6 +2,37 @@
 
 # IGNF / Circé 5
 
+> ## Local build & quick start (this fork — branche `local-macos-gdal`)
+>
+> Ce fork ajoute des instructions de compilation testées et des scripts d'aide :
+> **voir `BUILD.md`** (guide complet : macOS testé, procédure RedHat/RHEL 9, zones, FAQ).
+>
+> ```sh
+> # macOS : prérequis (voir BUILD.md §4.1)
+> brew install qt@5
+> brew install miniforge && /opt/homebrew/bin/conda create -y -n gdal -c conda-forge gdal
+>
+> # compiler les 4 cibles (CLI/GUI, avec/sans GDAL) et préparer les .app :
+> ./scripts/build-macos.sh
+>
+> # installer la commande `circe` accessible de partout :
+> ./scripts/install-cli-macos.sh
+>
+> circe -l      # liste des CRS (zone France)
+> circe -s RGF93v2bG. -f LP.METERS.DEGREES -S NTFLAMB2E. -F EN.METERS. 2.337229 48.856614
+> # -> 600051.756  2428697.028   (Notre-Dame, Lambert II étendu)
+>
+> CIRCE_ZONE=CirceGUY circe -l   # Guyane : RGFG95G, RGFG95UTM22, GUYA77 (= NGG 1977)
+>
+> # GUI (depuis le dossier des données) :
+> cd assets/CirceFR && open ../../build/qt_gui_gdal/circeWidget.app
+>
+> # RedHat/RHEL 9 : voir BUILD.md §5  (dnf install qt5-qtbase-devel gdal-devel, qmake-qt5, scripts/install-cli-linux.sh)
+> ```
+>
+> Patchs de ce fork (4 commits) : chemins GDAL portables via `gdal-config`, compatibilité
+> GDAL 3.x, correction d'un `#include`. Publication possible sur CodeBerg : BUILD.md §7.
+
 ## PURPOSE OF THE SOFTWARE
 
 Circé is a computer program whose purpose is the transformation of 4D+1 point 

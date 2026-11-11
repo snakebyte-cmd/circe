@@ -216,6 +216,28 @@ Réglages système > Confidentialité et sécurité > « Ouvrir quand même ».
 Vérification sans écran : `QT_QPA_PLATFORM=offscreen timeout 8 <app>/Contents/MacOS/circeWidget`
 doit afficher un warning Qt puis tourner (tué par le timeout).
 
+### 4.6 Utilisation avancée du CLI
+
+```sh
+circe -h                                   # aide complète (toutes les options)
+
+# transformation d'un FICHIER de points (un point par ligne, séparateur espace) :
+circe -s RGF93v2bG. -f LP.METERS.DEGREES -S RGF93LAMB93. -F EN.METERS. \
+      -p points_in.txt -P points_out.txt
+
+# fichier vectoriel via GDAL (SHP, GeoJSON, KML, CSV...) — format GDAL_OGR :
+circe -s RGF93v2bG. -f GDAL_OGR.METERS.DEGREES -S NTFLAMB2E. -F GDAL_OGR.METERS. \
+      -p in.geojson -P out.geojson
+
+# sortie JSON + fichier de log :
+circe -O JSON -o circe.log -s RGF93v2bG. -f LP.METERS.DEGREES -S NTFLAMB2E. -F EN.METERS. 2.337229 48.856614
+
+# coordonnées 4D (avec époques) : -e époque source, -E époque cible (années décimales)
+circe -s ITRF2014G. -e 2010.0 -S RGF93v2bG. -E 2019.0 -f LP.METERS.DEGREES -F LP.METERS.DEGREES 2.337229 48.856614 100
+
+# listes utiles : -l CRS, -x/-X frames, -w/-W transformations, -U unités, -v/-V formats
+```
+
 ## 5. RedHat / RHEL / Rocky Linux 9
 
 ### 5.1 Paquets (root)
@@ -250,8 +272,46 @@ Avec le patch, `gdal-config` est utilisé automatiquement ; plus besoin de crée
 
 Idem §4.3 (chemins relatifs depuis `assets/CirceFR`, binaires dans `build/...`).
 
-## 6. Références
+## 6. RedHat : commande `circe` dans le PATH (Linux)
 
-- Dépôt : https://github.com/IGNF/circe
+```sh
+sudo ./scripts/install-cli-linux.sh     # installe circe et circe-plain dans /usr/local/bin
+circe -l
+CIRCE_ZONE=CirceGUY circe -l            # autres zones, idem macOS
+```
+
+## 7. Publier ce fork sur CodeBerg
+
+```sh
+# 1. créer le dépôt vide sur https://codeberg.org (interface web)
+# 2. pousser la branche de travail (patchs + doc) :
+git remote add codeberg https://codeberg.org/<ton-user>/circe.git
+git push -u codeberg local-macos-gdal
+# 3. et éventuellement la branche principale : git push codeberg main
+```
+
+## 8. Mettre à jour le fork (nouvelles versions upstream)
+
+```sh
+git remote add upstream https://github.com/IGNF/circe.git    # une seule fois
+git fetch upstream
+git checkout local-macos-gdal
+git rebase upstream/main      # ou merge ; résoudre les conflits si upstream touche les mêmes lignes
+./scripts/build-macos.sh      # rebuilder et re-tester (macOS)
+```
+
+## 9. FAQ / dépannage
+
+- `dyld: Library not loaded: @rpath/libgdal...` → le rpath a sauté : relancer `./scripts/build-macos.sh`
+- `Cannot open` / `Bad Metadata filename` → lancer via le wrapper `circe` (il fait le `cd` dans `assets/<zone>`)
+- GUI « impossible d'ouvrir » → voir §4.5 (plugins Qt + `codesign`)
+- `qmake: command not found` → `export PATH=/opt/homebrew/opt/qt@5/bin:$PATH` (macOS) ou `qmake-qt5` (RHEL)
+- après un changement de flags qmake : supprimer `Makefile`, `.qmake.stash` **et la cible** avant `make`
+- `make ... | tail; echo $?` renvoie le code de `tail` → rediriger la sortie dans un fichier
+
+## 10. Références
+
+- Dépôt upstream : https://github.com/IGNF/circe
 - Site IGN (installateurs officiels, manuel) : https://geodesie.ign.fr (page Circé v5)
 - Doc du code : `html/index.html` dans le dépôt
+- CodeBerg : https://codeberg.org
