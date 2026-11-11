@@ -181,6 +181,9 @@ EOF
 
 Résultats obtenus : conformes (point et fichier GeoJSON, précision < 5 cm).
 
+> La **suite de tests par lots** embarquée upstream (tous territoires) se lance
+> avec `scripts/run-tests.sh` — voir **§12** et `TESTS.md`.
+
 ### 4.5 Lancer la GUI sur macOS (Gatekeeper + plugins Qt)
 
 `make` ne déploie pas les plugins Qt dans le `.app` et laisse une signature ad-hoc
@@ -378,3 +381,47 @@ git rebase upstream/main      # ou merge ; résoudre les conflits si upstream to
 - Site IGN (installateurs officiels, manuel) : https://geodesie.ign.fr (page Circé v5)
 - Doc du code : `html/index.html` dans le dépôt
 - CodeBerg : https://codeberg.org
+
+## 12. Tests par lots upstream (`scripts/run-tests.sh`)
+
+Le dépôt ne contient pas de tests unitaires mais une **suite de tests par lots**
+dans `assets/Circe*/` (fichiers `<ZONE>.txt` + logs de référence `test*.log`).
+Détails, principe et résultats : **`TESTS.md`**.
+
+```sh
+# toutes les zones, avec le binaire GDAL :
+scripts/run-tests.sh build/qt_cmd_gdal/circeFR
+# une seule zone, avec le binaire sans GDAL :
+scripts/run-tests.sh build/qt_cmd/circeFR CirceGUY
+```
+
+Le script tourne dans un répertoire temporaire (copie réelle, les logs de
+référence du dépôt ne sont jamais touchés — ils sont relus via `git show`),
+normalise les chemins Windows des fichiers de test, puis compare les logs
+produits aux références (séquence des transformations, alertes, valeurs
+numériques avec tolérance). Statuts : PASS / DIFF (référence upstream périmée) /
+OK (pas de référence) / FAIL. Résultat macOS arm64 : 2 PASS (GUY, KER), 1 OK (FR),
+5 DIFF documentés dans `TESTS.md`, 0 FAIL — et les builds avec/sans GDAL donnent
+des logs identiques.
+
+## 13. Manuel utilisateur en HTML (`doc/`)
+
+Le manuel officiel (PDF « Circé v5.4 », 46 p., https://geodesie.ign.fr/files/geodesie/2024-11/CirceV5ManuelUtilisateur.pdf)
+est converti en une page HTML autonome, alignée sur la version la plus récente du
+code sur GitHub (branche `main` @ `0bc8772` — aucun tag/release publié à ce jour) :
+
+- **`doc/manuel-utilisateur.html`** — conversion fidèle (46 pages, nav latérale,
+  figures extraites dans `doc/figures/`) + encadré « Note d'alignement »
+  (`doc/addendum-alignement.html`) : diff des options CLI manuel ↔ code (seul
+  `--loadAsVector` manque au manuel), version de référence, pointeurs build/tests.
+- **`doc/CirceV5ManuelUtilisateur.pdf`** — source ; **`doc/manuel.txt`** — extraction
+  texte (sert à reconstruire la table des matières).
+
+Régénération (nécessite `pip install pymupdf`, ex. dans un venv) :
+
+```sh
+pdftotext -layout doc/CirceV5ManuelUtilisateur.pdf doc/manuel.txt
+python3 scripts/pdf2html.py doc/CirceV5ManuelUtilisateur.pdf doc/manuel-utilisateur.html \
+  --txt doc/manuel.txt --figdir doc/figures --addendum doc/addendum-alignement.html
+# outils PDF : brew install poppler (macOS)
+```

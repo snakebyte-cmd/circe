@@ -1,0 +1,36 @@
+<h2>Note d’alignement — version de référence et ajouts du fork local</h2>
+<p>Cette page HTML est la conversion fidèle du manuel officiel <strong>Circé v5.4</strong>
+(septembre 2022, 46 pages). Elle est alignée ici sur la version la plus récente
+du code disponible sur GitHub :</p>
+<ul>
+<li><strong>IGNF/circe, branche <code>main</code> @ <code>0bc8772</code></strong> — à ce jour le dépôt
+GitHub ne publie <em>ni tag ni release</em> ; la branche <code>main</code> est donc la référence.
+La chaîne de version du code est <code>circe_program_version = "circe v5"</code>
+(circelib 1.3.0, voir <code>circelib/_circelib_version_.h</code>).</li>
+<li>Fork local : <a href="https://github.com/snakebyte-cmd/circe">github.com/snakebyte-cmd/circe</a>,
+branche <code>local-macos-gdal</code> (builds macOS testés, support GDAL 3, scripts de test).</li>
+</ul>
+<h3>Différences manuel v5.4 ↔ code actuel (options ligne de commande)</h3>
+<p>Le code (<code>circelib/parser.h</code>, table <code>circeArgumentDefinitions</code>) définit
+44 options ; le manuel v5.4 en documente 42. Seules différences :</p>
+<table>
+<tr><th>Option</th><th>État</th><th>Détail</th></tr>
+<tr><td><code>--loadAsVector</code> (<code>-C</code>)</td><td>présente dans le code, absente du manuel</td>
+<td>charge les points comme vecteur (mode avancé), compagnon de <code>--processAsVector</code> (<code>-c</code>)</td></tr>
+<tr><td><code>--usage</code></td><td>pseudo-option interne</td><td>affiche la ligne d’usage, non documentée dans le manuel</td></tr>
+</table>
+<p>Toutes les autres options documentées dans le manuel v5.4 existent inchangées dans le code
+(noms courts/longs identiques). Pour la liste faisant foi : <code>circeFR --help</code>.</p>
+<h3>Compléments propres à ce dépôt</h3>
+<ul>
+<li><strong>Construction locale</strong> (macOS testé, procédure RHEL 9) : voir <code>BUILD.md</code>.</li>
+<li><strong>Commandes installées</strong> sur macOS : <code>circe</code> (avec GDAL) et
+<code>circe-plain</code>, zone par <code>CIRCE_ZONE=CirceGUY</code> etc. — voir BUILD.md §4.3.</li>
+<li><strong>Tests</strong> : le dépôt amont embarque des tests par lots
+(<code>assets/Circe*/&lt;ZONE&gt;.txt</code> + logs de référence <code>test*.log</code>) ;
+le lanceur <code>scripts/run-tests.sh</code> les exécute et les compare — résultats détaillés dans
+<code>TESTS.md</code>.</li>
+<li><strong>Conversion HTML</strong> : <code>python3 scripts/pdf2html.py doc/CirceV5ManuelUtilisateur.pdf
+doc/manuel-utilisateur.html --txt doc/manuel.txt --figdir doc/figures --addendum doc/addendum-alignement.html</code>
+(nécessite <code>pip install pymupdf</code>).</li>
+</ul>

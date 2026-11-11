@@ -34,7 +34,14 @@
 > compatibilité GDAL 3.x, correction d'un `#include`, scripts et doc.
 > **Licence : GPL-3.0 inchangée** (voir `LICENSE` et BUILD.md §10) — les modifications de ce
 > fork sont distribuées sous la même licence, avec notices de copyright conservées.
-> Publication possible sur CodeBerg : BUILD.md §7.
+> Publication sur GitHub : BUILD.md §7.
+>
+> Autres documents de ce fork :
+> - **`TESTS.md`** — la suite de tests par lots upstream (`assets/Circe*/*.txt` +
+>   `test*.log`) et son lanceur `scripts/run-tests.sh` (résultats macOS inclus) ;
+> - **`doc/manuel-utilisateur.html`** — le manuel utilisateur officiel (PDF v5.4 de
+>   geodesie.ign.fr) converti en HTML et aligné sur la branche `main` d'IGNF/circe
+>   (voir l'encadré « Note d'alignement » en haut de page ; BUILD.md §13 pour régénérer).
 
 ## PURPOSE OF THE SOFTWARE
 

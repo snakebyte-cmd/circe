@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Manuel utilisateur de Circé (version HTML)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root { --fg:#1a1a1a; --accent:#0b5394; --bg:#fff; --code:#f4f4f4; }
+* { box-sizing: border-box; }
+body { font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif; color:var(--fg);
+       background:var(--bg); margin:0; line-height:1.55; }
+nav { position:sticky; top:0; background:#0b5394; padding:.6rem 1rem; max-height:100vh;
+      overflow:auto; width:280px; float:left; }
+nav a { color:#fff; text-decoration:none; font-size:.85rem; }
+nav ul { list-style:none; padding-left:.6rem; margin:.2rem 0; }
+nav li.lvl2 { padding-left:.8rem; } nav li.lvl3 { padding-left:1.6rem; }
+main { margin-left:300px; padding:1rem 2rem 4rem; max-width:60rem; }
+h1 { color:var(--accent); } h2 { border-bottom:2px solid var(--accent); padding-bottom:.2rem; }
+h3, h4 { color:var(--accent); }
+pre.cmd { background:var(--code); border-left:4px solid var(--accent); padding:.5rem .8rem;
+          overflow-x:auto; font-size:.85rem; }
+section.page { border-top:1px dashed #bbb; margin-top:2rem; padding-top:.5rem; }
+h2.pg { color:#999; font-size:.9rem; border:none; text-transform:uppercase; letter-spacing:.1em; }
+figure { margin:1rem 0; } figure img { max-width:100%; border:1px solid #ccc; }
+figcaption { font-size:.8rem; color:#666; }
+table { border-collapse:collapse; margin:1rem 0; }
+th, td { border:1px solid #ccc; padding:.3rem .6rem; font-size:.9rem; text-align:left; }
+th { background:var(--code); }
+.addendum { background:#fff8e1; border:1px solid #e0c060; padding:1rem 1.5rem; margin:1rem 0; }
+@media print { nav { display:none; } main { margin-left:0; } }
+</style>
+</head>
+<body>
+<nav>
+<h1 style="color:#fff;font-size:1.1rem;margin:.2rem 0 .6rem">Circé — Manuel utilisateur</h1>
+<ul><li class="lvl1"><a href="#p4">Glossaire .</a></li><li class="lvl1"><a href="#p7">1 Introduction</a></li><li class="lvl2"><a href="#p7">1.1 Présentation des fonctionnalités</a></li><li class="lvl2"><a href="#p7">1.2 Pour les utilisateurs avancés</a></li><li class="lvl1"><a href="#p8">2 Notions</a></li><li class="lvl2"><a href="#p8">2.1 Systèmes et repères de référence</a></li><li class="lvl3"><a href="#p8">2.1.1 Système de Référence Géodésique</a></li><li class="lvl3"><a href="#p9">2.1.2 Repère de Référence Géodésique</a></li><li class="lvl3"><a href="#p9">2.1.3 Système et Repère de Référence Géodésique pour un positionnement ultra-précis</a></li><li class="lvl3"><a href="#p10">2.1.4 Système de Référence Verticale</a></li><li class="lvl3"><a href="#p10">2.1.5 Repère de Référence Verticale</a></li><li class="lvl2"><a href="#p11">2.2 Système de Référence de Coordonnées (SRC)</a></li><li class="lvl3"><a href="#p12">2.2.1 SRC géocentrique</a></li><li class="lvl3"><a href="#p12">2.2.2 SRC géographique</a></li><li class="lvl3"><a href="#p13">2.2.3 SRC projeté</a></li><li class="lvl3"><a href="#p14">2.2.4 SRC vertical</a></li><li class="lvl3"><a href="#p16">2.2.5 Les identifiants de SRC</a></li><li class="lvl2"><a href="#p17">2.3 Conversions et transformations</a></li><li class="lvl3"><a href="#p17">2.3.1 Opération</a></li><li class="lvl3"><a href="#p18">2.3.2 Conversion</a></li><li class="lvl3"><a href="#p18">2.3.3 Transformation</a></li><li class="lvl3"><a href="#p21">2.3.4 Les principales options à initialiser dans Circé</a></li><li class="lvl3"><a href="#p21">2.3.5 Les opérations interprétées par Circé</a></li><li class="lvl3"><a href="#p22">2.3.6 Les opérations composées</a></li><li class="lvl1"><a href="#p23">3 Installation et lancement de Circé</a></li><li class="lvl2"><a href="#p23">3.1 Architecture commune aux distributions</a></li><li class="lvl2"><a href="#p24">3.2 Installation et lancement sous Linux</a></li><li class="lvl3"><a href="#p24">3.2.1 Installation par paquet</a></li><li class="lvl3"><a href="#p24">3.2.2 Les exécutables</a></li><li class="lvl3"><a href="#p25">3.2.3 Les fichiers de données par territoire</a></li><li class="lvl2"><a href="#p25">3.3 Installation et lancement sous Windows</a></li><li class="lvl1"><a href="#p27">4 Utilisation de la ligne de commande</a></li><li class="lvl2"><a href="#p27">4.1 Environnement</a></li><li class="lvl2"><a href="#p27">4.2 Les options</a></li><li class="lvl2"><a href="#p32">4.3 Syntaxe</a></li><li class="lvl3"><a href="#p32">4.3.1 Afficher l&#x27;aide</a></li><li class="lvl3"><a href="#p32">4.3.2 Afficher la liste des SRC disponibles</a></li><li class="lvl3"><a href="#p32">4.3.3 Afficher la zone de validité d&#x27;un SRC</a></li><li class="lvl3"><a href="#p33">4.3.4 Lancer les tests</a></li><li class="lvl3"><a href="#p34">4.3.5 Opérer sur de multiples SRC</a></li><li class="lvl3"><a href="#p35">4.3.6 Faire une opération sur un point</a></li><li class="lvl3"><a href="#p35">4.3.7 Faire une opération sur un fichier</a></li><li class="lvl2"><a href="#p35">4.4 Les formats de données</a></li><li class="lvl3"><a href="#p36">4.4.1 Les champs de données des formats</a></li><li class="lvl3"><a href="#p37">4.4.2 Les unités de mesure</a></li><li class="lvl3"><a href="#p37">4.4.3 Les époques</a></li><li class="lvl2"><a href="#p38">4.5 Exemple</a></li><li class="lvl1"><a href="#p41">5 Utilisation de l&#x27;interface graphique</a></li><li class="lvl2"><a href="#p41">5.1 Présentation</a></li><li class="lvl2"><a href="#p42">5.2 Ordre de renseignement des options</a></li><li class="lvl2"><a href="#p44">5.3 Options de menu</a></li><li class="lvl2"><a href="#p45">5.4 Lien avec la ligne de commande</a></li><li class="lvl2"><a href="#p46">5.5 Affichage au bas de l’interface</a></li><li class="lvl2"><a href="#p46">5.6 Bon à savoir</a></li></ul>
+</nav>
+<main>
+<h1>Manuel utilisateur de Circé</h1>
+<p>Conversion HTML du manuel officiel <em>« Ciré v5.4 — Manuel utilisateur »</em>
+(IGN, DT n° 60082 / 8648, septembre 2022, 46 pages, PDF distribué par
+<a href="https://geodesie.ign.fr/files/geodesie/2024-11/CirceV5ManuelUtilisateur.pdf">geodesie.ign.fr</a>).
+Générée par <code>scripts/pdf2html.py</code>.</p>
+<div class="addendum">
+<h2>Note d’alignement — version de référence et ajouts du fork local</h2>
+<p>Cette page HTML est la conversion fidèle du manuel officiel <strong>Circé v5.4</strong>
+(septembre 2022, 46 pages). Elle est alignée ici sur la version la plus récente
+du code disponible sur GitHub :</p>
+<ul>
+<li><strong>IGNF/circe, branche <code>main</code> @ <code>0bc8772</code></strong> — à ce jour le dépôt
+GitHub ne publie <em>ni tag ni release</em> ; la branche <code>main</code> est donc la référence.
+La chaîne de version du code est <code>circe_program_version = "circe v5"</code>
+(circelib 1.3.0, voir <code>circelib/_circelib_version_.h</code>).</li>
+<li>Fork local : <a href="https://github.com/snakebyte-cmd/circe">github.com/snakebyte-cmd/circe</a>,
+branche <code>local-macos-gdal</code> (builds macOS testés, support GDAL 3, scripts de test).</li>
+</ul>
+<h3>Différences manuel v5.4 ↔ code actuel (options ligne de commande)</h3>
+<p>Le code (<code>circelib/parser.h</code>, table <code>circeArgumentDefinitions</code>) définit
+44 options ; le manuel v5.4 en documente 42. Seules différences :</p>
+<table>
+<tr><th>Option</th><th>État</th><th>Détail</th></tr>
+<tr><td><code>--loadAsVector</code> (<code>-C</code>)</td><td>présente dans le code, absente du manuel</td>
+<td>charge les points comme vecteur (mode avancé), compagnon de <code>--processAsVector</code> (<code>-c</code>)</td></tr>
+<tr><td><code>--usage</code></td><td>pseudo-option interne</td><td>affiche la ligne d’usage, non documentée dans le manuel</td></tr>
+</table>
+<p>Toutes les autres options documentées dans le manuel v5.4 existent inchangées dans le code
+(noms courts/longs identiques). Pour la liste faisant foi : <code>circeFR --help</code>.</p>
+<h3>Compléments propres à ce dépôt</h3>
+<ul>
+<li><strong>Construction locale</strong> (macOS testé, procédure RHEL 9) : voir <code>BUILD.md</code>.</li>
+<li><strong>Commandes installées</strong> sur macOS : <code>circe</code> (avec GDAL) et
+<code>circe-plain</code>, zone par <code>CIRCE_ZONE=CirceGUY</code> etc. — voir BUILD.md §4.3.</li>
+<li><strong>Tests</strong> : le dépôt amont embarque des tests par lots
+(<code>assets/Circe*/&lt;ZONE&gt;.txt</code> + logs de référence <code>test*.log</code>) ;
+le lanceur <code>scripts/run-tests.sh</code> les exécute et les compare — résultats détaillés dans
+<code>TESTS.md</code>.</li>
+<li><strong>Conversion HTML</strong> : <code>python3 scripts/pdf2html.py doc/CirceV5ManuelUtilisateur.pdf
+doc/manuel-utilisateur.html --txt doc/manuel.txt --figdir doc/figures --addendum doc/addendum-alignement.html</code>
+(nécessite <code>pip install pymupdf</code>).</li>
+</ul>
+
+</div>
+<section class="page" id="p1">
+<h2 class="pg">Page 1</h2>
+<p>Circé v5.4 Manuel utilisateur</p>
+<figure><img src="figures/fig-p1-11.png" alt="figure page 1"><figcaption>Figure — page 1</figcaption></figure>
+</section><section class="page" id="p2">
+<h2 class="pg">Page 2</h2>
+<p>Service de Géodésie page 60082 8648 01 2/46 Glossaire ........................................................................................................................................................... 4 1 Introduction ................................................................................................................................................ 7 1.1 Présentation des fonctionnalités ............................................................................................................ 7 1.2 Pour les utilisateurs avancés .................................................................................................................. 7 2 Notions ......................................................................................................................................................... 8 2.1 Systèmes et repères de référence ........................................................................................................... 8 2.1.1 Système de Référence Géodésique ............................................................................................... 8 2.1.2 Repère de Référence Géodésique ................................................................................................. 9 2.1.3 Système et Repère de Référence Géodésique pour un positionnement ultra-précis ..................... 9 2.1.4 Système de Référence Verticale ................................................................................................. 10 2.1.5 Repère de Référence Verticale .................................................................................................... 10 2.2 Système de Référence de Coordonnées (SRC) .................................................................................... 11 2.2.1 SRC géocentrique ....................................................................................................................... 12 2.2.2 SRC géographique ...................................................................................................................... 12 2.2.3 SRC projeté ................................................................................................................................. 13 2.2.4 SRC vertical ................................................................................................................................ 14 2.2.5 Les identifiants de SRC............................................................................................................... 16 2.3 Conversions et transformations ........................................................................................................... 17 2.3.1 Opération..................................................................................................................................... 17 2.3.2 Conversion .................................................................................................................................. 18 2.3.3 Transformation ............................................................................................................................ 18 2.3.4 Les principales options à initialiser dans Circé ........................................................................... 21 2.3.5 Les opérations interprétées par Circé .......................................................................................... 21 2.3.6 Les opérations composées ........................................................................................................... 22 3 Installation et lancement de Circé........................................................................................................... 23 3.1 Architecture commune aux distributions ............................................................................................. 23 3.2 Installation et lancement sous Linux ................................................................................................... 24 3.2.1 Installation par paquet ................................................................................................................. 24</p>
+</section><section class="page" id="p3">
+<h2 class="pg">Page 3</h2>
+<p>Service de Géodésie page 60082 8648 01 3/46 3.2.2 Les exécutables ........................................................................................................................... 24 3.2.3 Les fichiers de données par territoire .......................................................................................... 25 3.3 Installation et lancement sous Windows ............................................................................................. 25 4 Utilisation de la ligne de commande ....................................................................................................... 27 4.1 Environnement .................................................................................................................................... 27 4.2 Les options ........................................................................................................................................... 27 4.3 Syntaxe ................................................................................................................................................ 32 4.3.1 Afficher l&#x27;aide.............................................................................................................................. 32 4.3.2 Afficher la liste des SRC disponibles ......................................................................................... 32 4.3.3 Afficher la zone de validité d&#x27;un  SRC ........................................................................................ 32 4.3.4 Lancer les tests ............................................................................................................................ 33 4.3.5 Opérer sur de multiples  SRC ..................................................................................................... 34 4.3.6 Faire une opération sur un point ................................................................................................. 35 4.3.7 Faire une opération sur un fichier ............................................................................................... 35 4.4 Les formats de données ....................................................................................................................... 35 4.4.1 Les champs de données des formats ........................................................................................... 36 4.4.2 Les unités de mesure ................................................................................................................... 37 4.4.3 Les époques ................................................................................................................................. 37 4.5 Exemple ............................................................................................................................................... 38 5 Utilisation de l&#x27;interface graphique ........................................................................................................ 41 5.1 Présentation ......................................................................................................................................... 41 5.2 Ordre de renseignement des options .................................................................................................... 42 5.3 Options de menu .................................................................................................................................. 44 5.4 Lien avec la ligne de commande ......................................................................................................... 45 5.5 Affichage au bas de l’interface ............................................................................................................ 46 5.6 Bon à savoir ......................................................................................................................................... 46</p>
+</section><section class="page" id="p4">
+<h2 class="pg">Page 4</h2>
+<p>Service de Géodésie page 60082 8648 01 4/46 Glossaire Altération linéaire (ppm) Rapport de la différence entre la longueur d&#x27;un arc projeté et la longueur de l&#x27;arc correspondant sur l&#x27;ellipsoïde, et cette longueur sur l’ellipsoïde. Altitude Coordonnée verticale physique (d&#x27;origine gravimétrique). Anomalie d&#x27;altitude Différence d’éloignement entre l&#x27;ellipsoïde de référence et le quasi-géoïde en un point (voir grille de quasi-géoïde). AUTHORITATIVE Code générique des référentiels verticaux dans Circé. Cible SRC d&#x27;arrivée d&#x27;une opération. circeEN Programme exécutable de Circé en ligne de commande, version anglaise.</p>
+<pre class="cmd">circeFR</pre>
+<p>Programme exécutable de Circé en ligne de commande, version française.</p>
+<pre class="cmd">circeWidgetEN</pre>
+<p>Programme exécutable de Circé IHM graphique, version anglaise.</p>
+<pre class="cmd">circeWidgetFR</pre>
+<p>Programme exécutable de Circé IHM graphique, version française. Convergence des méri- diens Gisement de la tangente à l’image du méridien orientée vers le nord géogra- phique en un point du plan de projection.</p>
+<h4 id="p4">Conversion</h4>
+<p>Opération sur les coordonnées dans un même repère de référence. CRS ou Coordinate Reference System SRC ou Système de Référence de Coordonnées (voir ce terme). Datum Référentiel (voir ce terme). Dimension Dimension des systèmes géodésiques : 2 (projections et coordonnées géogra- phiques sans hauteur), 3 (toutes coordonnées statiques) ou 4 (toutes coordonnées cinématiques). DM Degré Minute (unité de mesure angulaire des longitudes, latitudes et conver- gences des méridiens). DMS Degré Minute Seconde (unité de mesure angulaire des longitudes, latitudes et convergences des méridiens). Easting Appellation de la coordonnée projetée en abscisse. EN Easting, Northing. Désignation des coordonnées projetées. Epoque Date de validité des coordonnées exprimées dans un repère de référence géodé- sique cinématique (4D). ETRF2000 Réalisation recommandée d&#x27;ETRS89. ETRS89 European Terrestrial Reference System  / Système de Référence Terrestre Euro- péen. EVRF2000 Réalisation recommandée d&#x27;EVRS. EVRS European Vertical Reference System / Système de Référence Vertical Européen. Frame Repère de référence géodésique ou vertical. GNSS Global Navigation Satellite System / Géolocalisation et Navigation par un Sys- tème de Satellites (GPS, Glonass, Galileo, Beidou etc.). Grid motion model Modèle de vitesse par grille.</p>
+</section><section class="page" id="p5">
+<h2 class="pg">Page 5</h2>
+<p>Service de Géodésie page 60082 8648 01 5/46 Grille de géoïde Grille de transformation entre un repère de référence géodésique et un système d&#x27;altitude orthométrique. Grille de quasi-géoïde Grille de transformation entre un repère de référence géodésique et un système d&#x27;altitude normale comme IGN69. GRS80 ou IAG-GRS80 Ellipsoïde associé à la plupart des systèmes de référence réalisés à partir de me- sures GNSS. Hauteur Dans le contexte de Circé, synonyme de hauteur ellipsoïdale, troisième coordon- née géographique. Coordonnée verticale géométrique. Institut National de l&#x27;Information Géographique et Forestière. IGNF ou IGN-F Le registre IGN-F décrit les systèmes de références de coordonnées utilisés par les produits de l’IGN. Le cas échéant, il fournit les correspondances avec la codi- fication EPSG. IGN69 ou NGF-IGN69 Repère de Référence Verticale légal en France continentale. IGN78 ou NGF-IGN78 Repère de Référence Verticale légal en Corse. IHM Interface Homme-Machine INSPIRE Directive européenne visant à établir une infrastructure de données géogra- phiques pour assurer l’interopérabilité entre bases de données. ITRF International Terrestrial Reference Frame / Repère de Référence Terrestre Inter- national. Réalisation de l&#x27;ITRS en principe désignée par son millésime (ITRF2008, ITRF2014 etc.). ITRS International Terrestrial Reference System / Système de Référence Terrestre International. LPh Lambda Phi Hauteur (λφh). Désignation des coordonnées géographiques. Module linéaire Rapport entre la longueur d&#x27;un arc projeté et la longueur de l&#x27;arc correspondant sur l&#x27;ellipsoïde. Northing Appellation de la coordonnée projetée en ordonnée. NTF Repère de Référence Géodésique historique (pré-GNSS) de la France continen- tale. NTV2 National Transformation version 2. Format de grille de transformation sur les coordonnées géographiques initialement développé par Natural Resources Cana- da. Ondulation du géoïde Différence entre l&#x27;ellipsoïde de référence et le géoïde en un point (voir grille de géoïde).</p>
+<h4 id="p5">Opération</h4>
+<p>Dans Circé, concaténation de conversions et/ou de transformations explicitement demandée par l&#x27;utilisateur. Opération composée Dans Circé, enchaînement d&#x27;opérations en passant par un système pivot dans lequel est exprimé un modèle de vitesse, le cas échéant. Plate motion model Modèle de vitesse par pôle de rotation de plaque tectonique. PMM Plate motion model. RAF20 Grille de quasi-géoïde pour les transformations verticales entre IGN69 et RGF93 v2b. Référentiel Appellation des systèmes et des repères de référence quand on ne souhaite pas faire la distinction.</p>
+</section><section class="page" id="p6">
+<h2 class="pg">Page 6</h2>
+<p>Service de Géodésie page 60082 8648 01 6/46 Repère de Référence Géodésique Réalisation d&#x27;un Système de Référence Géodésique. Repère de Référence Verticale Réalisation d&#x27;un Système de Référence Verticale, parfois appelé repère altimé- trique. RGAF09 Système géodésique légal des Antilles françaises. RGF93 Système géodésique légal de la France métropolitaine. Source SRC de départ d&#x27;une opération. SRC Système de Référence de Coordonnées (voir ce terme). Système de Référence de Coordonnées Identification des coordonnées par leur repère de référence et leur type (géocen- trique, géographique ou projeté). Système de Référence Géodésique Système de référence spatial en rotation avec la Terre dans son mouvement diurne. Système de Référence Verticale Système de référence spatial dans lequel sont exprimées des altitudes, parfois appelé système altimétrique. TAC Transformation Ascii Circé. Format texte des grilles de transformation de Circé (ex-mnt). TBC Transformation Binaire Circé. Format binaire des grilles de transformation de Circé (ex-bin).</p>
+<h4 id="p6">Transformation</h4>
+<p>Opération inter-repères. UN-GGIM United Nations initiative on Global Geospatial Information Management. Vitesse Variation annuelle des coordonnées d’un point, interpolée par Circé dans un mo- dèle de mouvement (grid / plate motion model). WCTS Web Coordinate Transformation Service. WGS84 Dans le contexte de Circé, désignation par défaut du référentiel de tout position- nement par GNSS ; devrait être remplacé par une désignation précise quand elle est connue. C&#x27;est aussi la désignation des systèmes légaux antillais de deuxième génération (remplacés par RGAF09). XYZ Désignation des coordonnées cartésiennes géocentriques. λφh Désignation des coordonnées géographiques.</p>
+</section><section class="page" id="p7">
+<h2 class="pg">Page 7</h2>
+<p>Service de Géodésie page 60082 8648 01 7/46</p>
+<h2 id="p7">1 Introduction</h2>
+<p>Ce document est le manuel utilisateur de Circé v5.3 dans ses versions ligne de commande et graphique fonc- tionnant sous Linux et Windows. La version 5.3 contient des modifications substantielles par rapport à la version 5, qui était elle-même une réécriture complète du logiciel en fonction de divers objectifs, principale- ment la multiplicité des plateformes d’utilisation et la distribution du code source1.</p>
+<h3 id="p7">1.1 Présentation des fonctionnalités</h3>
+<p>Circé réalise des opérations sur les coordonnées de points dans le cadre suivant :  Transformations ponctuelles entre référentiels géodésiques et verticaux selon les besoins de la légi- slation française et de la réglementation européenne (INSPIRE), ainsi que des standards internatio- naux (NTV2 …) et scientifiques (ITRS).  Conversions ponctuelles entres les types de coordonnées géocentriques, géographiques et projetées au sein de chaque référentiel géodésique.  Interface homme-machine graphique et ligne de commande. Les habitués des versions antérieures trouveront de nombreuses nouveautés dont voici les plus saillantes :  Deux référentiels verticaux en entrée et en sortie. Il est possible de réaliser une transformation verti- cale autre que hauteur-altitude, par exemple entre deux types d’altitude, dans la mesure où le modèle de transformation existe.  Transformations à 14 paramètres « ITRF2014 @ époque vers références locales légales ».  Prise en compte de modèles de vitesse.  Une IHM permettant d’accéder à plusieurs territoires.  Quelques options de menu et autres astuces qui facilitent la manipulation des coordonnées.  Une ligne de commande plus conviviale.</p>
+<h3 id="p7">1.2 Pour les utilisateurs avancés</h3>
+<p>des thèmes comme l’introduction de paramètres géodésiques, des valeurs de transformations (par exemple au format NTV2) ou une nouvelle projection sur une zone géographique particulière. 1 Le code source est ouvert (open source) ce qui explique les anglicismes des options de la ligne de commande.</p>
+</section><section class="page" id="p8">
+<h2 class="pg">Page 8</h2>
+<p>Service de Géodésie page 60082 8648 01 8/46</p>
+<h2 id="p8">2 Notions</h2>
+<p>Les notions expliquées ici sont traduites en termes concrets dans l’aide géodésique relative à chaque terri- toire, accessible par l’IHM. On consultera aussi avec profit la documentation géodésique en ligne à l’url https://geodesie.ign.fr/index.php?page=documentation#titre4.</p>
+<h3 id="p8">2.1  Systèmes et repères de référence</h3>
+<h4 id="p8">2.1.1 Système de Référence Géodésique</h4>
+<p>Un Système de Référence Géodésique est un système de référence spatial en rotation avec la Terre dans son mouvement diurne. Dans un tel système, les positions de points ancrés à la surface de la Terre solide ont des coordonnées quasi-fixes, mais subissant de petites variations périodiques (marées …) ou non périodiques (tectonique, mouvements locaux de terrain …). Certaines de ces variations sont prises en compte dans les modélisations scientifiques et on en trouvera trace dans Circé v5. Dans le futur, la géodésie grand public inclura aussi les vitesses ponctuelles. Les coordonnées natives des SRG modernes sont les coordonnées géocentriques XYZ. Physiquement, l’origine O du système d’axe est proche du centre de gravité de la Terre, l’axe OZ est proche de l’axe de rotation de la Terre, OXY est proche du plan de l’équateur et OXZ correspond au plan méridien origine. En pratique, le seul plan OXZ valable correspond au méridien de Greenwich. En effet, les systèmes géodé- siques classiques, dont les méridiens origines peuvent être différents, sont bidimensionnels et le passage aux coordonnées tridimensionnelles (géographiques ou cartésiennes) est réalisé dans le but d’appliquer des trans- formations entre des systèmes d’axes très proches (donc rapportés à Greenwich) pour minimiser les valeurs à appliquer et simplifier les itérations le cas échéant. La surface de la Terre disparaît dans cette représentation qui est celle, native, des GNSS. On ne saurait toute- fois se passer d’un ellipsoïde pour disposer au minimum de coordonnées horizontales. Historiquement, l’ellipsoïde était la donnée fondamentale du Système de Référence Géodésique. Il est doré- navant une donnée associée. Un ellipsoïde historique représente correctement une part de la surface de la Terre, l’ellipsoïde moderne (IAG-GRS80 en général) en représente correctement la totalité. Un Système de Référence Géodésique a une dimension (2, 3 ou 4) qui définit les Systèmes de Référence de Coordonnées possibles (voir ci-dessous la définition du SRC).</p>
+</section><section class="page" id="p9">
+<h2 class="pg">Page 9</h2>
+<p>Service de Géodésie page 60082 8648 01 9/46</p>
+<h4 id="p9">2.1.2 Repère de Référence Géodésique</h4>
+<p>Un Système de Référence Géodésique est  un ensemble de conventions permettant la réalisation d’un Repère de Référence Géodésique, qui donne physiquement accès au système grâce à des moyens de mesure. En général, dans un contexte non scientifique, on a tendance à confondre système et repère de référence. Toutefois, un même système donnant lieu à des versions (e.g. RGF93 v1 puis v2 le 18 juin 2010) qui sont en fait une succession de repères de référence, l’usager des réseaux de référence est forcément touché par l’évolution des coordonnées de référence et a intérêt à faire la distinction. Les transformations se font au niveau des repères et non des systèmes. Ainsi, quand les hauteurs ellipsoïdales varient sensiblement (e.g. RGF93 v1, v2 et v2b), il faut appliquer la bonne transformation verticale pour obtenir les mêmes altitudes (e.g. RAF98, RAF09 et RAF20). Dans une version donnée de Circé, l’utilisateur n’a accès qu’à une réalisation de chaque système. La version la plus récente donne accès à la réalisation la plus récente. Il n’y a donc pas d’ambiguïté à ce sujet et on par- lera parfois de référentiel. *ELG id  a         b            1/f           e²            nom ELG 004 6378206.4 6356583.8000 294.978698213 .006768657997 Clarke 1866 ELG 037 6378137.0 6356752.3141 298.257222101 .006694380036 GRS 1980 *LGO id unite valeur nom LGO 01 01    0.     Greenwich *REG id  ELG LGO dimension code    nom REG 423 004 01  2D        STPM50  SAINT PIERRE ET MIQUELON 1950 REG 706 037 01  3D        RGSPM06 RGSPM06 *ZNE REG unite lonMin latMin lonMax latMax ZNE 423 02    -56.49 46.7   -56.1  47.2 ZNE 706 02    -56.49 46.7   -56.1  47.2 Initialisation des systèmes/repères géodésiques avec les ellipsoïdes, le méridien origine et les emprises géographiques qui leur sont associés (exemple du fichier de données de Saint-Pierre-et-Miquelon).</p>
+<h4>2.1.3 Système et Repère de Référence Géodésique pour un positionnement</h4>
+<p>ultra-précis Chez les scientifiques, distinguer système et repère de référence fait partie du quotidien. Ces notions sont nécessaires pour un positionnement ultra-précis, centimétrique voire millimétrique dans certains cas. Les systèmes de référence utilisés en France sont le système international International Terrestrial Reference System (ITRS) et le système européen European Terrestrial Reference System (ETRS89). Leurs réalisations sont les repères de référence dits Terrestrial Reference Frames. Les repères recommandés actuellement sont ITRF2014 et ETRF2000, mais certains pays ayant déjà adopté d’autres références comme socle de leur sys- tème officiel vont bien sûr conserver leur convention.</p>
+</section><section class="page" id="p10">
+<h2 class="pg">Page 10</h2>
+<p>Service de Géodésie page 60082 8648 01 10/46 Le RGF932 est, à l’origine, une réalisation d&#x27;ETRS89 à l&#x27;époque 1993.0. La version 2 de 2010 fait du RGF93 un équivalent d&#x27;ETRF2000 (une réalisation d&#x27;ETRS89) à l&#x27;époque 2009.0, puis à l&#x27;époque 2019.0 depuis sa mise à jour de 2020. Les points ont des vitesses en ETRF2000 mais pas en RGF93 ; ce sont les vitesses rési- duelles des vitesses en ITRS, auxquelles on a retranché la vitesse de la plaque tectonique eurasienne. RGF93(1) ~ ETRF89 @ 1993.0 RGF93(2) ~ ETRF2000 @ 2009.0 RGF93(2b) ~ ETRF2000 @ 2019.0 Avec la demande croissante de positionnement ultra-précis, l’ITRS tend à devenir la référence mondiale commune. L’Organisation des Nations Unies, par l’intermédiaire du sous-comité pour la géodésie de l’UN- GGIM (United Nations initiative on Global Geospatial Information Management), recommande l’utilisation de l’ITRS pour toutes les applications de positionnement spatial.</p>
+<h4 id="p10">2.1.4 Système de Référence Verticale</h4>
+<p>Un Système de Référence Verticale est défini par la donnée d’éléments : la définition physique du type d’altitude dépendant du champ de pesanteur terrestre (normales, orthométriques, …), un niveau de référence (rattachement à un marégraphe), un point fondamental et son altitude conventionnelle, etc. Ces données permettent de définir des coordonnées verticales : altitude, cote géopotentielle, etc. Circé prend en compte divers Systèmes de Référence Verticale sur une même zone et les transformations qui les lient : altitude normale et orthométrique, etc. Les systèmes de référence verticale français (continent, Corse, départements et régions d’outre-mer) sont listés par exemple à la page suivante : http://geodesie.ign.fr/index.php?page=reseaux_nivellement_francais.</p>
+<h4 id="p10">2.1.5 Repère de Référence Verticale</h4>
+<p>La distinction entre système et repère de référence vertical n&#x27;est pas encore pertinente à l’IGN. En effet, pour la France, les altitudes ne sont pas mises à jour globalement mais individuellement, point par point. Une mise à jour comme le passage des altitudes orthométriques aux altitudes normales a donné lieu à la création d&#x27;un nouveau système. En revanche, la distinction entre système et repère anticipe la gestion des réalisations du système européen EVRS (European Vertical Reference System) : EVRF2000 etc., avec les transformations vers IGN69 et IGN78. *REA id  code       nom REA 018 DANGER1950 DANGER 1950 Initialisation d’un système/repère vertical (exemple du fichier de données de Saint-Pierre-et-Miquelon). Son emprise géographique est celle de la grille qui lui est associée (voir ci-dessous).</p>
+<h2>2 Voir une explication détaillée à http://geodesie.ign.fr/index.php?page=rgf93.</h2>
+</section><section class="page" id="p11">
+<h2 class="pg">Page 11</h2>
+<p>Service de Géodésie page 60082 8648 01 11/46</p>
+<h3 id="p11">2.2 Système de Référence de Coordonnées (SRC)</h3>
+<p>Les coordonnées géographiques, les coordonnées cartésiennes géocentriques, les coordonnées projetées et les altitudes sont regroupées sous l’entité Système de Référence de Coordonnées (SRC ou CRS en anglais), ce qui permet de systématiser les opérations réalisées sur ces SRC. Les utilisateurs de SIG ont tendance à nommer les SRC par l&#x27;unique terme de projection et les opérations réalisées dessus par reprojection, ce qui peut porter à confusion. Le SRC est défini par un système de coordonnées. C’est un repère mathématique à 1, 2 ou 3 axes et des uni- tés de mesure. Les SRC géocentriques, géographiques et projetés, définis ci-dessous, sont liés à un Repère de Référence Géodésique, réalisation d’un Système de Référence. Si ce dernier est de dimension 2, il n’existe pas de SRC correspondant géocentrique, du moins de manière publique. Il existe comme intermédiaire de calcul pour l’application d’opérations concaténées. Il en va de même pour la troisième dimension géographique. Pour un expert ou un développeur, un système 2D peut donc être vu comme un système 3D. Système.dimension type de coordonnées SRC 4D, 3D, 2D 4D (coordonnées supplémen- taires) 2D (coordonnées cachées) (X, Y, Z, VX, VY, VZ) géocentrique h) géographique E, N projeté (autant de SRC que de projections) La liste des SRC liés à un repère de référence géodésique est déterminée par la dimension du système géodésique et la liste des projections associées. Les systèmes 4D induisent les mêmes SRC que les 3D, avec une différence sur les coordonnées géocen- triques qui prennent en compte une dimension temporelle avec les vitesses annuelles. La zone (emprise géographique) des SRC géocentriques et géographiques est en principe la même que celle de leur Système de Référence Géodésique, alors que la zone des SRC projetés est incluse dedans. Certains éléments de format sont considérés ailleurs (hors Circé) comme des éléments de définition des SRC. Ainsi, dans le registre IGNF3, les GeographicCRS sont définis plusieurs fois avec des unités différentes (de- grés, DMS) et avec ou sans la hauteur (2D vs 3D). En revanche, pour Circé, l&#x27;unité et l’utilisation de la hau- teur sont une question de format de données. Pour Circé, il n&#x27;y a pas de SRC composé. Les CompoundCRS de IGNF sont ignorés. La syntaxe des options permet d&#x27;initialiser les identifiants de SRC sous la forme apparente d&#x27;un SRC composé (les deux identifiants séparés par un point) mais ils sont traités séparément.</p>
+<h2>3 https://geodesie.ign.fr/contenu/fichiers/IGNF.v3.1.0.xml.</h2>
+</section><section class="page" id="p12">
+<h2 class="pg">Page 12</h2>
+<p>Service de Géodésie page 60082 8648 01 12/46</p>
+<h4 id="p12">2.2.1 SRC géocentrique</h4>
+<p>Un point est positionné par 3 coordonnées cartésiennes (X, Y, Z) dont l’unité de mesure est le mètre. De plus, dans un contexte scientifique (système 4D), le point peut avoir 3 coordonnées de vitesse (VX, VY, VZ) en mètre par an. L’époque du point est alors un attribut pertinent.</p>
+<h4 id="p12">2.2.2 SRC géographique</h4>
+<p>Un point est positionné par 3 coordonnées, la longitude et la latitude à la surface d’un ellipsoïde, et la hauteur au-dessus de l’ellipsoïde (h). Les unités de mesure de la longitude et de la latitude sont assez nom- breuses : radians, degrés sous diverses formes (décimaux, DMS, DM …), grades (ou gons), etc. Le troisième axe a le mètre pour unité de mesure. Un SRC géographique a l&#x27;avantage d&#x27;offrir à la fois une représentation spatiale tridimensionnelle exacte, équivalente à la représentation cartésienne géocentrique avec la donnée d&#x27;un ellipsoïde, et une représentation plane, immédiatement lisible, avec la longitude et la latitude, même si cette représentation plane n&#x27;a aucune des qualités géométriques requises pour une projection. Ainsi, un SRC géographique (sans la hauteur) peut aussi être considéré comme un cas particulier de SRC projeté, puisque ce dernier est en principe défini par une méthode à partir d’un SRC géographique de base. La méthode serait en l’occurrence une projection plate carrée simplifiée sans facteur d&#x27;échelle, mais avec une translation possible des longitudes selon le méridien origine. Cependant, l’utilisateur pourrait être troublé si Coordonnées géocentriques et géographiques</p>
+<figure><img src="figures/fig-p12-162.png" alt="figure page 12"><figcaption>Figure — page 12</figcaption></figure>
+</section><section class="page" id="p13">
+<h2 class="pg">Page 13</h2>
+<p>Service de Géodésie page 60082 8648 01 13/46 les coordonnées géographiques apparaissaient au même niveau que les projections dans une interface. C&#x27;est pourquoi on conserve la distinction. Comme le seul méridien valable en 3D est le méridien de Greenwich (voir la présentation du Système de Référence Géodésique), la longitude exprimée dans un SRC géographique peut toujours lui être rapportée. Si le méridien origine est différent, on aura deux systèmes géodésiques, avec des longitudes rapportées à ces deux méridiens. Ainsi, les coordonnées géographiques NTF, en principe uniques, peuvent en réalité être ex- primées par rapport au méridien de Paris (nativement) ou de Greenwich (pour appliquer des transforma- tions).</p>
+<h4 id="p13">2.2.3 SRC projeté</h4>
+<p>Un point est positionné par 2 coordonnées cartésiennes (EN pour Easting, Northing) qui éliminent la cour- bure de la Terre et induisent donc une distorsion surfacique et/ou angulaire contrôlée par la définition de la projection. Un SRC géographique peut servir de base à de nombreux SRC projetés. A l&#x27;inverse, une méthode de projec- tion peut être appliquée à divers SRC géographiques (liés à des repères géodésiques différents) avec des pa- ramètres différents (en particulier l&#x27;ellipsoïde). Par exemple, on associe souvent une projection UTM à chaque référentiel applicable sur un territoire. On devrait donc toujours associer le nom du référentiel au nom de la méthode de projection. Les coordonnées projetées seront nommées EN et non xy comme on peut le trouver parfois, pour éviter la confusion avec les coordonnées géocentriques. Relation entre un système 2D et le système 3D correspondant utilisé pour les transformations</p>
+<figure><img src="figures/fig-p13-164.png" alt="figure page 13"><figcaption>Figure — page 13</figcaption></figure>
+</section><section class="page" id="p14">
+<h2 class="pg">Page 14</h2>
+<p>Service de Géodésie page 60082 8648 01 14/46 *PRC id   mode X0     Y0 LGO  unité_ang l0  j0 delta  j1 j2 c type nom PRC 0221 0    500000 0  01   02        -57 0  0.9996 0  0  0 2    UTM Nord fuseau 21 *PROJ REG PRC unit lonMin latMin lonMax latMax  code        nom PROJ 423 221 02 -56.495  46.696 -56.102 47.199 STPM50UTM21 STPM50 - UTM Nord fuseau 21 PROJ 706 221 02 -56.491  46.699 -56.099 47.201 RGSPM06U21  RGSPM06 - UTM Nord fuseau 21 Initialisation d’une méthode de projection et des Systèmes de Référence de Coordonnées projetés qui l’utilisent (exemple du fichier de données de Saint-Pierre-et-Miquelon).</p>
+<h4 id="p14">2.2.4 SRC vertical</h4>
+<p>Un point a une coordonnée, l’altitude, exprimée en mètres dans un Repère de Référence Verticale. D’autres valeurs pourraient représenter une coordonnée verticale, comme la cote géopotentielle (en m2s-2), mais seule l’altitude est pertinente pour Circé. Une coordonnée verticale peut exister sans coordonnées horizontales, puisque l’altitude est un attribut d’un repère physique (repère de nivellement, bouée maritime etc.) qu’il suffit de désigner par un identifiant. Ce- pendant, dans le contexte de Circé, un point a toujours au minimum des coordonnées horizontales, afin de valider son inclusion dans un territoire géographique donné, ainsi que pour pouvoir interpoler des valeurs de transformation verticale dans une grille (sauf dans le cas de constantes). Schéma d’une reprojection</p>
+<figure><img src="figures/fig-p14-166.png" alt="figure page 14"><figcaption>Figure — page 14</figcaption></figure>
+</section><section class="page" id="p15">
+<h2 class="pg">Page 15</h2>
+<p>Service de Géodésie page 60082 8648 01 15/46 Remarque : Circé permet à l’utilisateur de calculer des altitudes sans expliciter l’identifiant du SRC vertical cible. Dans ce contexte, il est remplacé par le mot-clé AUTHORITATIVE (officiel)4. Suivant les SRC géodé- siques source et cible, Circé connaît les transformations verticales qui leurs sont associées, et donc les SRC verticaux potentiellement atteints. Ainsi dans un lot de points traité, chaque point pourra obtenir une altitude dans le SRC vertical par défaut du territoire dans lequel il se trouve ; il s’agit du SRC légal quand il existe. L&#x27;utilisation du mot-clé AUTHORI- TATIVE permet à l&#x27;utilisateur de transformer en une seule fois un ensemble de points écrits dans un fichier n&#x27;appartenant pas aux mêmes zones de référentiels verticaux.</p>
+<h2>4 Voir l’exemple traité ci-dessous dans la partie 4.5 Exemple.</h2>
+<p>Schéma d’une transformation verticale par « grille de (quasi-) géoïde ». Il s’insère dans les autres schémas au niveau des SRC 3D ou 4D source ou cible. Transformation entre deux systèmes verticaux</p>
+<figure><img src="figures/fig-p15-168.png" alt="figure page 15"><figcaption>Figure — page 15</figcaption></figure>
+<figure><img src="figures/fig-p15-169.png" alt="figure page 15"><figcaption>Figure — page 15</figcaption></figure>
+</section><section class="page" id="p16">
+<h2 class="pg">Page 16</h2>
+<p>Service de Géodésie page 60082 8648 01 16/46 Soyez prudent lorsque vous utilisez cette option, car vous pourriez vous retrouver avec un seul fichier contenant des altitudes liées à différentes référentiels verticaux ! Supposons qu’un référentiel vertical soit utilisé pour le continent et autre référentiel vertical soit utilisé pour une île (trop loin du rivage pour partager celle utilisée sur le continent). Par exemple, en France continentale, l’altitude est exprimée en IGN69 et est calculée à partir de la hauteur ellipsoïdale et de l’anomalie d’altitude interpolée dans la grille RAF20 ; en Corse, l’altitude est exprimée en IGN78 et la transformation utilise la grille RAC09. Supposons que l&#x27;utilisateur ait écrit dans un seul fichier les coordonnées géographiques de points dont certains sont sur le contient et d’autres en Corse, et qu&#x27;il souhaite transformer les hauteurs ellipsoïdales en altitudes. Si le mot-clé AUTHORITATIVE est utilisé, Circé analysera le fichier et recherchera pour chaque point la transformation associée au repère de référence géodésique d&#x27;entrée. Il existe deux transformations dans cet exemple : la transformation continentale et la transformation insulaire. Dans ce cas, Circé comparera les coordonnées géographiques avec les limites des transformations et utilisera la transformation dont les limites englobent le point. Si le point appartient à une zone de chevauchement des grilles, Circé utilise automatiquement la transformation de plus petite emprise pour effectuer la transformation. En revanche, si le mot-clé AUTHORITATIVE n&#x27;est pas utilisé, l&#x27;utilisateur doit choisir un repère de référence vertical. S&#x27;il choisit IGN69, les points en Corse ne seront pas transformés et déclarés hors limites. À l&#x27;inverse, s&#x27;il choisit IGN78, les points en Corse seront transformés et les points continentaux déclarés hors limites.</p>
+<h4 id="p16">2.2.5 Les identifiants de SRC</h4>
+<p>Les identifiants des Systèmes de Référence de Coordonnées (utilisés pour écrire une ligne de commande) sont initialisés selon des règles simples à partir des référentiels du fichier de métadonnées géodésiques « da- taXXX.txt ». Les lignes REG de ce fichier contiennent un champ identifiant le SRC géocentrique associé, si possible identique à l&#x27;identifiant d’IGNF bien que ce ne soit pas indispensable au fonctionnement de Circé. Ensuite, l&#x27;identifiant du SRC géographique est créé en ajoutant la lettre G au premier identifiant. Enfin, les identifiants des SRC projetés sont lus dans le fichier. La règle qui prévaut (pour une raison de clarté) est de former ces identifiants par concaténation de l&#x27;identifiant du SRC géocentrique et d&#x27;une désignation de la mé- thode de projection (ex. RGF93LAMB93). Quand un système géodésique 2D est lié à un méridien autre que Greenwich, il est dédoublé en deux sys- tèmes. Les SRC suivent alors la règle énoncée précédemment. Par exemple, le SRC géocentrique virtuel NTF est lié à Greenwich tandis que NTFP est lié à Paris. Les SRC géographiques sont respectivement NTFG et NTFPG.</p>
+</section><section class="page" id="p17">
+<h2 class="pg">Page 17</h2>
+<p>Service de Géodésie page 60082 8648 01 17/46 Types de SRC Identifiants Géocentrique RGF93 Géographique RGF93G Projetés RGF93LAMB93, RGF93CC42, RGF93CC43, RGF93CC44, RGF93CC45, RGF93CC46, RGF93CC47, RGF93CC48, RGF93CC49, RGF93CC50, ETRS89LAEA, ETRS89LCC, RGF93UTM30, RGF93UTM31, RGF93UTM32 Exemples d’identifiants de Systèmes de Référence de Coordonnées pour le système RGF93.</p>
+<h3 id="p17">2.3 Conversions et transformations</h3>
+<h4 id="p17">2.3.1 Opération</h4>
+<p>Une opération sur les coordonnées change des valeurs relatives à un SRC source en des valeurs relatives à un SRC cible. On distingue deux types d’opérations, les conversions (même repère de référence géodésique) et les transformations (repères différents). Une opération a un statut qui permet de distinguer l’opération à choisir dans une liste. Le statut peut être officiel ou dérivé. Par exemple, la transformation NTF-RGF93 peut être effectuée par la grille officielle gr3df97a.tac, ou une grille dérivée au format NTV2 (non distribuée dans le Circé grand public). Une opération est réversible quand les paramètres de l’opération opposée sont les mêmes avec des signes opposés, la même méthode devant être mise en œuvre. L’opération opposée est alors définie implicitement. En revanche, deux opérations opposées doivent être définies explicitement si elles ne sont pas réversibles. Le passage d’un SRC quelconque à un autre se fait le long d’un chemin d’opérations. Conversions intra-repère et transformation inter-repères</p>
+<figure><img src="figures/fig-p17-172.png" alt="figure page 17"><figcaption>Figure — page 17</figcaption></figure>
+</section><section class="page" id="p18">
+<h2 class="pg">Page 18</h2>
+<p>Service de Géodésie page 60082 8648 01 18/46 Au sein d’un même repère géodésique, le passage des coordonnées géocentriques aux projetées (et récipro- quement) se fait par concaténation de conversions en passant par les coordonnées géographiques. Si les SRC source et cible sont liés à des systèmes géodésiques différents, le chemin emprunté dépend de la transformation choisie. En l’absence de choix explicite de l’utilisateur, c’est la transformation officielle qui est choisie et le chemin passe par les coordonnées cartésiennes géocentriques.</p>
+<h4 id="p18">2.3.2 Conversion</h4>
+<p>Une conversion est une opération pour laquelle les SRC source et cible dérivent du même Repère de Réfé- rence Géodésique. Les cas sont les suivants :  Passage des coordonnées géographiques aux cartésiennes et réciproquement.  Projection et projection inverse, entre SRC géographique et projeté. Sont implémentées dans la ver- sion actuelle les méthodes suivantes : conique conforme de Lambert ; Mercator Transverse (pour UTM) ; Gauss-Laborde ; Lambert Azimuthal Equal Area ; stéréographique polaire sud. Une conversion est définie par des formules et est donc exacte. Ses paramètres ne dépendent pas du point où on l&#x27;applique. Les formules utilisées dans Circé garantissent une précision inférieure à 1 mm, ce qui implique qu’un aller- retour (par exemple une projection suivie de son inverse) donne une différence de moins de 2 mm entre les coordonnées initiales et le résultat final. En pratique cette différence est très souvent inférieure à 1 mm. Les algorithmes (méthodes et paramètres) de projection utilisés dans Circé sont publiés sur Internet à l’url https://geodesie.ign.fr/index.php?page=algorithmes.</p>
+<h4 id="p18">2.3.3 Transformation</h4>
+<p>Une transformation est une opération pour laquelle les SRC source et cible dérivent de Systèmes de Réfé- rence Géodésique ou Verticale différents, qui préexistent à la définition de la transformation. Contrairement à une conversion, une transformation est déterminée de manière approchée par ajustement de jeux de coordonnées exprimées dans les deux systèmes. Ses paramètres dépendent du point où on l&#x27;applique et elle est affectée d&#x27;un code de précision dépendant également du point. Type Méthode Exemple de paramètres</p>
+<h4 id="p18">Transformation</h4>
+<p>géodésique Translation sur les coordonnées cartésiennes (cons- tante ou interpolée dans une grille) Grille NTF-RGF93 gr3df97a.tac (officielle)</p>
+<h4 id="p18">Transformation</h4>
+<p>géodésique Translation sur les coordonnées géographiques (constante ou interpolée dans une grille) Grille NTF-RGF93 ntf_r93.gsb (NTV2)</p>
+<h4 id="p18">Transformation</h4>
+<p>géodésique Similitude sur les coordonnées cartésiennes  (7 paramètres éventuellement dérivés de 14) Les transformations entre réalisa- tions de l’ITRS</p>
+</section><section class="page" id="p19">
+<h2 class="pg">Page 19</h2>
+<p>Service de Géodésie page 60082 8648 01 19/46 Type Méthode Exemple de paramètres</p>
+<h4 id="p19">Transformation</h4>
+<p>géodésique Changement d’époque par pôle de rotation ITRF2014 plate motion model (Zuheir Altamimi et al.)</p>
+<h4 id="p19">Transformation</h4>
+<p>verticale Translation sur les coordonnées verticales (cons- tante ou interpolée dans une grille) Grille IGN69-RGF93 raf20.tac Méthodes de transformation *TSG id REG1 REG2 prec Tx Ty Tz Ech Rx Ry Rz dTx dTy dTz dEch dRx dRy dRz Epoque TSG 10797 423 706 3 -95.593 573.763 173.442 42.6265 -.9602 1.2510 -1.3918 0 0 0 0 0 0 0 0 Initialisation d’une transformation constante entre repères géodésiques (exemple du fichier de données de Saint-Pierre-et-Miquelon). Entre deux repères 3D, les variations des paramètres de transformation sont toutes nulles. Il est possible de réaliser un changement d’époque au sein du système pivot (défini dans le fichier de don- nées de Circé par le mot-clé KEYREG) par l’utilisation d’un « modèle de mouvement » (motion model en anglais) qui peut être soit un modèle de pôle de rotation de plaque tectonique (plate motion model) ou une grille (grid motion model). Par tradition, le changement d’époque est rangé parmi les transformations bien qu’il ne change pas de sys- tème géodésique 4D. En effet, d’un autre point de vue, il s’agit d’une transformation entre deux systèmes 3D i.e. le système 4D figé aux époques cible et source. De plus, contrairement aux formules de conversion, les modèles de mouvement sont déterminés de manière approchée par ajustement de jeux de coordonnées ex- primées à différentes époques, et se rangent donc dans la catégorie des méthodes de transformation. KEYREG I14 *PMM REG num dTx(m/y) dTy(m/y) dTz(m/y) dRx(mas/y) dRy(mas/y) dRz(mas/y) name PMM I14 EU  0        0        0        -0.085     -0.531     0.770      Eurasia Initialisation d’un modèle de pôle de rotation de plaque tectonique (plate motion model).</p>
+</section><section class="page" id="p20">
+<h2 class="pg">Page 20</h2>
+<p>Service de Géodésie page 60082 8648 01 20/46 Détermination de coordonnées dans le système légal à partir de mesures effectuées dans l’ITRF courant. Changement d’époque au sein du système pivot, le cas échéant.</p>
+<figure><img src="figures/fig-p20-177.png" alt="figure page 20"><figcaption>Figure — page 20</figcaption></figure>
+<figure><img src="figures/fig-p20-178.png" alt="figure page 20"><figcaption>Figure — page 20</figcaption></figure>
+</section><section class="page" id="p21">
+<h2 class="pg">Page 21</h2>
+<p>Service de Géodésie page 60082 8648 01 21/46</p>
+<h4 id="p21">2.3.4 Les principales options à initialiser dans Circé</h4>
+<p>L&#x27;utilisateur initialise les identifiants d&#x27;au plus 4 SRC: un SRC géodésique source (SG1), un SRC vertical source (SV1), un SRC géodésique cible (SG2) et un SRC vertical cible (SV2). Il initialise également les données en entrée sur lesquelles porteront les opérations ainsi que leur format. Les formats doivent être cohérents avec la nature des SRC. En premier lieu, les types de coordonnées asso- ciés aux SRC doivent être compatibles avec le type de coordonnées indiqué par le format. Les coordonnées géographiques ou projetées associées à un SRC de dimension 3 peuvent contenir ou non une hauteur, et c&#x27;est le format qui l&#x27;indique. De même, ces coordonnées peuvent être associées à une altitude (si le SRC vertical est initialisé), selon le format. Il ne peut pas y avoir simultanément une hauteur et une altitude sources. En effet, Circé ne saurait pas quoi en faire : recalculer l&#x27;une à partir de l&#x27;autre avec une transformation, dans le SRC cible ou source … Ce qu&#x27;on appelle altitude doit être pris dans un sens très général de coordonnée verticale qui, dans le contexte de Circé, est accessible par une transformation verticale en tant que cible ou source. Dans le cas de coordonnées exprimées dans un système 4D, il faut aussi définir l’époque des coordonnées.</p>
+<h4 id="p21">2.3.5 Les opérations interprétées par Circé</h4>
+<p>Pour réaliser des opérations géodésiques, il suffit en général d&#x27;initialiser SG1 et SG2. C&#x27;est un peu plus com- pliqué si le SRC source correspond à un repère 2D et le SRC cible à un repère 3D. Il est possible d&#x27;initialiser SV1, alors les hauteurs cibles (et les géocentriques correspondantes) seront calculées par transformation ver- ticale des altitudes, à la place des hauteurs directement issues de la transformation géodésique. Les transformations verticales sont diverses. Si SV1 et SV2 sont initialisés, Circé cherchera à appliquer une transformation verticale entre les deux SRC sans faire intervenir une éventuelle hauteur ellipsoïdale. Dans le cas où SG1, SV1 et SG2 sont initialisés, en plus des opérations sur les coordonnées géodésiques, une transformation verticale est recherchée parmi les diverses possibilités. SV1 étant initialisé, on a une altitude en entrée. Elle peut servir à calculer une hauteur ellipsoïdale dans les SRC source et/ou cible, selon les trans- formations disponibles. De même, si c&#x27;est SV2 qui est initialisée au lieu de SV1, c&#x27;est que l&#x27;utilisateur souhaite calculer une altitude à partir d&#x27;une hauteur dans les SRC source et/ou cible, selon les transformations disponibles. Dans les deux derniers cas, s&#x27;il existe des transformations verticales entre les altitudes et les hauteurs à la fois dans les SRC source et cible, Circé le signale par un message et s&#x27;arrête car il serait possible de calculer la donnée cible de deux manières différentes donnant des résultats différents. C&#x27;est potentiellement le cas, par exemple, aux Antilles où il existe des grilles verticales pour les systèmes dits « WGS84 xxx» (un par île) et RGAF09.</p>
+</section><section class="page" id="p22">
+<h2 class="pg">Page 22</h2>
+<p>Service de Géodésie page 60082 8648 01 22/46</p>
+<h4 id="p22">2.3.6 Les opérations composées</h4>
+<p>Les paragraphes précédents traitent des opérations explicitement demandées par l’utilisateur. Si la demande ne peut pas être exécutée directement, Circé cherchera à intercaler un repère pivot (s’il est défini) et l’opération composée pourra être effectuée s’il existe deux transformations, l’une du repère source au repère pivot, et l’autre du repère pivot au repère cible. S’il existe un modèle de vitesse associé au repère pivot, un changement d’époque est possible et pourra être intercalé entre les deux transformations. C’est le cas en particulier pour les transformations entre réalisations de l’ITRS.</p>
+</section><section class="page" id="p23">
+<h2 class="pg">Page 23</h2>
+<p>Service de Géodésie page 60082 8648 01 23/46</p>
+<h2 id="p23">3 Installation et lancement de Circé</h2>
+<h3 id="p23">3.1 Architecture commune aux distributions</h3>
+<p>Les fichiers d’une installation typique de Circé sont répartis dans deux répertoires, le répertoire des fichiers exécutables et celui des fichiers de données par territoire dans lequel l’utilisateur doit avoir le droit d’écrire. Système Répertoire typique des fichiers exé- cutables Répertoire typique des fichiers de données par territoire (un sous-répertoire par ter- ritoire) Debian, Ubuntu etc. /usr/bin /usr/share/Circe/data Windows 7 et 10 C:\Program Files (x86)\IGN\Circe 5.3 C:\ProgramData\IGN\Circe\5.3 Répertoires d’installation typiques de Circé (les noms peuvent varier selon l’installation et la version) Ces répertoires peuvent être modifiés et il n’est pas indispensable de passer par les logiciels d’installation. Dans tous les cas, le lancement de Circé se fera ainsi (voir plus loin les commandes précises pour Linux et Windows) :  Pour lancer l’IHM, il faut que le répertoire de démarrage (ne contenant pas d’espace ni de caractère spécial) soit celui des fichiers de données par territoire ; ensuite, lancer l’exécutable avec ou sans chemin selon qu’il est connu par le système ou non (i.e. contenu dans la variable Path ou PATH). Le répertoire de démarrage peut être un des sous-répertoires, contenant les données d’un seul territoire, si l’on souhaite ne donner accès qu’à celui-ci et non à tous.  Pour la ligne de commande, le nom du fichier de métadonnées géodésiques (d’un territoire unique) est passé en options avec un chemin complet, on n&#x27;a donc pas besoin de se positionner dans le bon répertoire ; lancer l’exécutable avec ou sans chemin selon qu’il est connu par le système ou non. Les tables suivantes donnent une indication générale sur le contenu des répertoires. Nom du fichier Description</p>
+<pre class="cmd">circeFR ; circeEN</pre>
+<p>Exécutables de la ligne de commande en  versions fran- çaise et anglaise.</p>
+<pre class="cmd">circeWidgetFR ; circeWidgetEN</pre>
+<p>Exécutables de l’IHM en  versions française et anglaise. CirceV5ManuelUtilisateur.pdf Ce manuel utilisateur. msvcp140.dll, platforms/qwindows.dll, Qt5Core.dll, Qt5Gui.dll, Qt5Widgets.dll, vcruntime140.dll (Windows) Bibliothèques dynamiques nécessaires au fonctionnement de l’IHM. Contenu principal du répertoire des exécutables</p>
+</section><section class="page" id="p24">
+<h2 class="pg">Page 24</h2>
+<p>Service de Géodésie page 60082 8648 01 24/46 Nom du fichier Description *.tac ; *.tbc ; *.xml Grilles de transformation *.bmp ; *.ico ; *.png Images de l’IHM graphique circe_options_*.xml Options de l’IHM graphique Data*.txt ; Data*.xml Métadonnées géodésiques *.chm Aide géodésique Contenu principal d’un répertoire de territoire Remarque : Les fichiers de données par territoire sont transférables d’une plateforme à l’autre sauf les ver- sions binaires des grilles de transformations (*.tbc) qui sont créées à la première utilisation à partir des ver- sions texte (*.tac).</p>
+<h3 id="p24">3.2 Installation et lancement sous Linux</h3>
+<h4 id="p24">3.2.1 Installation par paquet</h4>
+<p>Le paquet Debian circe52.deb permet d&#x27;installer Circé v5 sous les systèmes d&#x27;exploitation basés sur Debian (Ubuntu etc.)5. La commande est : dpkg -i circe52.deb</p>
+<h4 id="p24">3.2.2 Les exécutables</h4>
+<p>Les fichiers exécutables sont installés dans /usr/bin. L’IHM est appelée par un shell circe52shell. L’icône pointe dessus, ainsi que le gestionnaire d’application. Il est possible de lancer le script directement en cas de problème. Ce script positionne le démarrage dans le répertoire des fichiers de données par territoire puis exécute</p>
+<pre class="cmd">circeWidget qui est un lien symbolique sur l’exécutable idoine (par défaut /usr/bin/circe52/circeWidgetFR).</pre>
+<p>But Contenu Lancement de l’IHM donnant le choix du territoire (script /usr/bin/circe52shell). cd /usr/share/circe52/data</p>
+<pre class="cmd">circeWidget</pre>
+<p>Lancement de l’IHM pour un seul territoire (exemple de la France continentale &amp; Corse). cd /usr/share/circe52/data/France</p>
+<pre class="cmd">circeWidget circe_options_FR.xml</pre>
+<p>Scripts de lancement de l’IHM sous Linux. /usr/bin contient également circe qui est un lien symbolique pointant sur l’exécutable de la ligne de com-</p>
+<pre class="cmd">mande, par défaut /usr/bin/circe52/circeFR.</pre>
+<p>5 Pour un autre Linux il est possible de copier à la main les fichiers dans les répertoires pertinents.</p>
+</section><section class="page" id="p25">
+<h2 class="pg">Page 25</h2>
+<p>Service de Géodésie page 60082 8648 01 25/46 Logiciels appelés : L’aide géodésique au format Microsoft Compressed HTML (*.chm), initialement conçu pour Windows, peut être affichée à l’aide du programme libre et gratuit xchm qui s’installe par l’Advanced Packaging Tool. De même pour evince qui permet d’afficher le manuel utilisateur au format pdf. Avant de demander l’affichage de ces fichiers par le menu Aide de Circé, l’utilisateur doit s’assurer que ces logiciels, ou des logiciels équivalents, sont bien installés.</p>
+<h4 id="p25">3.2.3 Les fichiers de données par territoire</h4>
+<p>Il faut que l’utilisateur ait les droits d’écriture dans le répertoire de données /usr/share/circe52. Si besoin est, vous pouvez vous attribuer les droits en écriture avec une commande du type : chown -R [utilisateur][:groupe] /usr/share/circe52 S&#x27;il n&#x27;est pas possible de modifier les droits, vous pouvez copier le répertoire dans le compte utilisateur, di- sons ~/circe52. Il faut alors modifier ainsi le script circe52shell (voir ci-dessus) cd ~/circe52/data/</p>
+<pre class="cmd">circeWidget</pre>
+<p>Exemple de script modifié</p>
+<h3 id="p25">3.3 Installation et lancement sous Windows</h3>
+<p>Pour effectuer l&#x27;installation par le setup Windows, lancer Install_Circe_V52.exe (32 bits) sous un compte administrateur. Les dialogues habituels des assistants d&#x27;installation s&#x27;affichent. Il faut bien cocher la case qui permet de créer les raccourcis. Pour que chaque utilisateur puisse faire fonctionner Circé, il faut donner le contrôle total aux utilisateurs sur le répertoire de démarrage. En principe, le programme d’installation réalise cette opération automatiquement. Dans le menu démarrer se trouve un répertoire &quot;Circé 52&quot; permettant de lancer ou désinstaller l’IHM, ainsi que de visualiser le manuel utilisateur. On lance l&#x27;IHM par un des raccourcis (Windows) ou scripts (Linux) créés à l&#x27;installation. L&#x27;exécutable a pour option un fichier xml :</p>
+<pre class="cmd">circeWidgetXX  (path)/IGN/Circe/5/&lt;nom de la région&gt;/circe_options_XX.xml</pre>
+<p>Raccourci dans le bureau : s’il n’est pas créé par l’installation, vous pouvez créer un raccourci du fichier exécutable par le menu contextuel du fichier, dans quelque répertoire qu’il soit, et modifier ses propriétés en saisissant dans « Démarrer dans » le répertoire des fichiers de données par territoire.</p>
+</section><section class="page" id="p26">
+<h2 class="pg">Page 26</h2>
+<p>Service de Géodésie page 60082 8648 01 26/46 Une seule ligne d&#x27;option de circe_options_XX.xml est indispensable pour lancer le programme : la balise metadataFile initialisant le fichier de métadonnées. Les autres balises sont écrites à la fermeture du programme puis lues à l&#x27;ouverture suivante ce qui permet en principe de retrouver les options dans l&#x27;état où on les a laissées. Remarque A la place de msvcp140.dll, il est possible que le système demande une autre version comme msvcp120.dll. Les bibliothèques manquantes sont distribuées par Microsoft qui fournit un logiciel d&#x27;installation (Visual C++ Redistributable Packages for Visual Studio 2013) à : https://www.microsoft.com/en-us/download/details.aspx?id=40784. Vous pouvez installer vcredist_x64.exe (64 bits) ou vcredist_x86.exe (32 bits) selon l&#x27;architecture de votre processeur.</p>
+</section><section class="page" id="p27">
+<h2 class="pg">Page 27</h2>
+<p>Service de Géodésie page 60082 8648 01 27/46</p>
+<h2 id="p27">4 Utilisation de la ligne de commande</h2>
+<h3 id="p27">4.1 Environnement</h3>
+<p>Pour trouver quelle ligne de commande correspond à ce que vous cherchez à faire, le plus simple est sans doute de la créer par l&#x27;interface graphique. En effet, la ligne de commande sous-jacente est écrite en bas de l&#x27;interface au fur et à mesure de son initialisation. Sous Windows, pour pouvoir lancer les lignes de commande depuis n&#x27;importe quel répertoire sans écrire le chemin complet de l&#x27;exécutable, ajouter le chemin dans la variable d&#x27;environnement Path (exemple) : set Path=%Path%;%ProgramFiles(x86)%\IGN\Circe 5.3 Selon la configuration de l’invite de commande dans laquelle Circé sera lancé, il arrive que les caractères accentués ne soient pas affichés correctement. Sous Windows, il est possible de commencer par taper : chcp 1252 Alors les caractères accentués sont affichés correctement dans la fenêtre. En effet, chcp modifie la page de codes active de la console, et Windows-1252 est un jeu de caractères utilisé sous Windows dans les princi- pales langues d’Europe de l’Ouest, dont le français. En revanche, il n’est pas possible de traiter des fichiers dont le nom et le chemin comportent des caractères spéciaux (accents etc.).</p>
+<h3 id="p27">4.2 Les options</h3>
+<p>La syntaxe des options de la ligne de commande suit certaines conventions POSIX mais pas toutes. Chaque option a un nom court introduit par un tiret (-) et un nom long introduit par deux tirets (--). RECOMMANDATION : Utilisez les noms d&#x27;option longs pour conserver votre ligne de commande sur le long terme. Les options d&#x27;affectation doivent être suivies par la valeur affectée. Le nom court est suivi de la valeur sépa- rée ou non par un espace, tandis que le nom long affecte avec un signe égal (=). Pour avoir une liste d’options à jour, la liste pouvant avoir évolué depuis la rédaction de ce document, lancer</p>
+<pre class="cmd">l’aide en ligne de commande : circeFR --help.</pre>
+<p>L&#x27;ordre des options n&#x27;a pas d&#x27;importance sauf pour les coordonnées qui doivent être écrites après les options le cas échéant. Il faut bien écrire toute la commande sur une seule ligne.</p>
+</section><section class="page" id="p28">
+<h2 class="pg">Page 28</h2>
+<p>Service de Géodésie page 60082 8648 01 28/46 Nom court Nom long Description</p>
+<pre class="cmd">-h</pre>
+<pre class="cmd">--help</pre>
+<p>Affiche la liste des options.</p>
+<pre class="cmd">-q</pre>
+<pre class="cmd">--quiet</pre>
+<p>N&#x27;affiche que le résultat de la commande.</p>
+<pre class="cmd">-Q</pre>
+<pre class="cmd">--verbose</pre>
+<p>Affiche le résultat et diverses informations.</p>
+<pre class="cmd">-m</pre>
+<pre class="cmd">--metadataFile</pre>
+<p>Affecte le chemin complet du fichier de métadonnées géodésiques.</p>
+<pre class="cmd">--metadataFile=metadataFilePathName</pre>
+<pre class="cmd">-b</pre>
+<pre class="cmd">--boundaryFile</pre>
+<p>Affecte le nom du fichier de limites sans chemin.</p>
+<pre class="cmd">--boundaryFile=boundaryFileName</pre>
+<pre class="cmd">-s</pre>
+<pre class="cmd">--sourceCRS</pre>
+<p>Affecte les identifants des SRC sources géodésiques et verticaux séparés par un point. Syntaxes possibles :</p>
+<pre class="cmd">--sourceCRS=SourceGeodeticCRSid.SourceVerticalCRSid</pre>
+<pre class="cmd">--sourceCRS=SourceGeodeticCRSid</pre>
+<pre class="cmd">--sourceCRS=SourceGeodeticCRSid.</pre>
+<pre class="cmd">--sourceCRS=.SourceVerticalCRSid</pre>
+<p>SourceVerticalCRSid peut être remplacé par AUTHORITATIVE, avec lequel Circé choisira le référentiel par défaut adapté à chaque point traité.</p>
+<pre class="cmd">-f</pre>
+<pre class="cmd">--sourceFormat</pre>
+<p>Affecte le format des données sources en trois éléments séparés par un point : le format (*), l&#x27;unité de mesure linéaire, l&#x27;unité de mesure angu- laire.</p>
+<pre class="cmd">--sourceFormat=sourceFormatId.sourceLinearUnit.</pre>
+<p>sourceAngularUnit</p>
+<pre class="cmd">-S</pre>
+<pre class="cmd">--targetCRS</pre>
+<p>Affecte les identifants des SRC cibles géodésiques et verticaux séparés par un point. Syntaxes possibles :</p>
+<pre class="cmd">--targetCRS=TargetGeodeticCRSid.TargetVerticalCRSid</pre>
+<pre class="cmd">--targetCRS=TargetGeodeticCRSid</pre>
+<pre class="cmd">--targetCRS=TargetGeodeticCRSid.</pre>
+<pre class="cmd">--targetCRS=.TargetVerticalCRSid</pre>
+<p>TargetVerticalCRSid peut être remplacé par AUTHORITATIVE, avec lequel Circé choisira le référentiel par défaut adapté à chaque point traité.</p>
+</section><section class="page" id="p29">
+<h2 class="pg">Page 29</h2>
+<p>Service de Géodésie page 60082 8648 01 29/46 Nom court Nom long Description</p>
+<pre class="cmd">-r</pre>
+<pre class="cmd">--transfoRequired</pre>
+<p>Affecte les éventuels identifants des transformations géodésiques et verticales imposées par l&#x27;utilisateur, séparés par un point.</p>
+<pre class="cmd">--transfoRequired=idGeodeticTransfo.idVerticalTransfo</pre>
+<pre class="cmd">-F</pre>
+<pre class="cmd">--targetFormat</pre>
+<p>Affecte le format des données cibles en trois éléments séparés par un point : le format (*), l&#x27;unité de mesure linéaire, l&#x27;unité de mesure angu- laire.</p>
+<pre class="cmd">--targetFormat=targetFormatId.targetLinearUnit.</pre>
+<p>targetAngularUnit</p>
+<pre class="cmd">-n</pre>
+<pre class="cmd">--displayPrecision</pre>
+<pre class="cmd">En complément de --targetFormat, affecte la précision d’affichage des</pre>
+<p>coordonnées en mètres (valeur par défaut : 0.001). L’équivalent est dé- terminé par Circé pour les valeurs angulaires.</p>
+<pre class="cmd">-e</pre>
+<pre class="cmd">--sourceEpoch</pre>
+<p>Affecte l&#x27;époque des données sources en années décimales.</p>
+<pre class="cmd">--sourceEpoch=sourceEpoch</pre>
+<pre class="cmd">-E</pre>
+<pre class="cmd">--targetEpoch</pre>
+<p>Affecte l&#x27;époque des données cibles en années décimales.</p>
+<pre class="cmd">--targetEpoch=targetEpoch</pre>
+<pre class="cmd">-p</pre>
+<pre class="cmd">--sourcePathname</pre>
+<p>Affecte le chemin des données sources.</p>
+<pre class="cmd">--sourcePathname=sourcePathname</pre>
+<pre class="cmd">-P</pre>
+<pre class="cmd">--targetPathname</pre>
+<p>Affecte le chemin des données cibles.</p>
+<pre class="cmd">--targetPathname=targetPathname</pre>
+<pre class="cmd">-N</pre>
+<pre class="cmd">--separator</pre>
+<p>Définit le séparateur de champ des fichiers en entrée. Les valeurs pos- sibles sont : Espace (défaut), Virgule, Point-virgule, Tabulation (en toutes lettres) ou un caractère.</p>
+<pre class="cmd">-l</pre>
+<pre class="cmd">--getCRSlist</pre>
+<p>Affiche la liste des SRC disponibles dans cette version, incluant les SRC composés.</p>
+<pre class="cmd">-a</pre>
+<pre class="cmd">--getValidityArea</pre>
+<p>Affiche la zone de validité d&#x27;un SRC.</p>
+<pre class="cmd">-u</pre>
+<pre class="cmd">--getAuthority</pre>
+<p>Affiche l’autorité d&#x27;un SRC.</p>
+<pre class="cmd">-R</pre>
+<pre class="cmd">--followUpTransfos</pre>
+<p>Affiche les valeurs des transformations utilisées le cas échéant.</p>
+<pre class="cmd">-t</pre>
+<pre class="cmd">--runTest</pre>
+<p>Lance les tests.</p>
+<pre class="cmd">-T</pre>
+<pre class="cmd">--multipleCRS</pre>
+<p>Opère sur un lot de fichiers, chacun définissant des coordonnées dans un SRC source et plusieurs SRC cibles.</p>
+</section><section class="page" id="p30">
+<h2 class="pg">Page 30</h2>
+<p>Service de Géodésie page 60082 8648 01 30/46 Nom court Nom long Description</p>
+<pre class="cmd">-g</pre>
+<pre class="cmd">--gridLoading</pre>
+<p>Affecte le type de chargement des grilles de transformation. Deux va- leurs sont possibles : BINARY : Le fichier binaire est simplement ouvert. C&#x27;est la valeur par défaut quand les tests sont lancés ou en mode point interactif ; elle est préférable quand très peu de points sont à traiter. ARRAY : Le fichier texte ou binaire est chargé en mémoire.</p>
+<pre class="cmd">-v</pre>
+<pre class="cmd">--getDataFileFormat</pre>
+<p>Obtenir une liste cohérente (relativement au SRC choisi) de formats de fichiers au format id:text séparés par des virgules.</p>
+<pre class="cmd">--getDataFileFormat –-metadataFile=metadataFilePathName</pre>
+<p>-–sourceCRS=sourceCRS</p>
+<pre class="cmd">-V</pre>
+<pre class="cmd">--getDataPointFormat</pre>
+<p>Obtenir une liste cohérente (relativement au SRC choisi) de formats de points au format id:text séparés par des virgules.</p>
+<pre class="cmd">--getDataPointFormat -–metadataFile=metadataFilePathName</pre>
+<p>-–sourceCRS=sourceCRS</p>
+<pre class="cmd">-w</pre>
+<pre class="cmd">--getGeodeticTransfo</pre>
+<p>Obtenir une liste cohérente (relativement aux SRCs choisis) d&#x27;identifiants de transformations.</p>
+<pre class="cmd">--getGeodeticTransfo –-metadataFile=metadataFilePathName</pre>
+<pre class="cmd">-–sourceCRS=sourceCRS --targetCRS=targetCRS</pre>
+<pre class="cmd">-y</pre>
+<pre class="cmd">--getSourceGeodeticCRS</pre>
+<p>Obtenir une liste cohérente (relativement au repère choisi) de SRC géo- désiques sources au format id:text séparés par des virgules.</p>
+<pre class="cmd">--getSourceGeodeticCRS –-metadataFile=metadataFilePathName</pre>
+<p>-–sourceFrame=sourceFrame</p>
+<pre class="cmd">-x</pre>
+<pre class="cmd">--getSourceGeodeticFrame</pre>
+<p>Obtenir la liste des repères géodésiques au format id:text séparés par des virgules.</p>
+<pre class="cmd">--getSourceGeodeticFrame</pre>
+<p>–-metadataFile=metadataFilePathName</p>
+<pre class="cmd">-z</pre>
+<pre class="cmd">--getSourceVerticalCRS</pre>
+<p>Obtenir une liste cohérente (relativement au SRC géodésique choisi) de SRC verticaux sources au format id:text séparés par des virgules.</p>
+<pre class="cmd">--getSourceVerticalCRS –-metadataFile=metadataFilePathName</pre>
+<p>-–sourceCRS=sourceCRS</p>
+<pre class="cmd">-Y</pre>
+<pre class="cmd">--getTargetGeodeticCRS</pre>
+<p>Obtenir une liste cohérente (relativement au SRC source et au repère cible choisis) de SRC géodésiques cibles au format id:text séparés par des virgules.</p>
+<pre class="cmd">--getTargetGeodeticCRS –-metadataFile=metadataFilePathName</pre>
+<pre class="cmd">-–sourceCRS=sourceCRS --targetFrame=targetFrame</pre>
+</section><section class="page" id="p31">
+<h2 class="pg">Page 31</h2>
+<p>Service de Géodésie page 60082 8648 01 31/46 Nom court Nom long Description</p>
+<pre class="cmd">-X</pre>
+<pre class="cmd">--getTargetGeodeticFrame</pre>
+<p>Obtenir une liste cohérente (relativement au SRC source choisi) de re- pères géodésiques cibles au format id:text séparés par des virgules.</p>
+<pre class="cmd">--getTargetGeodeticFrame</pre>
+<p>–-metadataFile=metadataFilePathName -–sourceCRS=sourceCRS</p>
+<pre class="cmd">-Z</pre>
+<pre class="cmd">--getTargetVerticalCRS</pre>
+<p>Obtenir une liste cohérente (relativement aux SRC source et cible choi- sis) de SRC verticaux cibles au format id:text séparés par des virgules.</p>
+<pre class="cmd">--getTargetVerticalCRS –-metadataFile=metadataFilePathName</pre>
+<pre class="cmd">-–sourceCRS=sourceCRS --targetCRS=targetCRS</pre>
+<pre class="cmd">-U</pre>
+<pre class="cmd">--getUom</pre>
+<p>Obtenir une liste cohérente (relativement au format choisi) d&#x27;unités de mesure au format id:text séparés par des virgules.</p>
+<pre class="cmd">--getUom –-metadataFile=metadataFilePathName</pre>
+<p>–-sourceFormat=sourceFormat</p>
+<pre class="cmd">-W</pre>
+<pre class="cmd">--getVerticalTransfo</pre>
+<p>Obtenir une liste cohérente (relativement aux SRCs choisis) d&#x27;identifiants de transformations.</p>
+<pre class="cmd">--getVerticalTransfo –-metadataFile=metadataFilePathName</pre>
+<pre class="cmd">-–sourceCRS=sourceCRS --targetCRS=targetCRS</pre>
+<pre class="cmd">-L</pre>
+<pre class="cmd">--getZoneList</pre>
+<p>Donner la liste des zones géographiques traitées, c&#x27;est-à-dire la liste des sous-répertoires du répertoire de travail contenant des fichiers d&#x27;option de Circé IHM. Les zones, séparées par une virgule, sont écrites sous la forme région:circe_options_XXX.xml.</p>
+<pre class="cmd">-o</pre>
+<pre class="cmd">--logPathname</pre>
+<p>Argument : Chemin complet du fichier log</p>
+<pre class="cmd">-D</pre>
+<pre class="cmd">--noPrintSppm</pre>
+<p>Ne pas afficher l’altération linéaire associée aux coordonnées projetées en PPM, mais le facteur d&#x27;échelle (module linéaire) dont la valeur est proche de 1.</p>
+<pre class="cmd">-O</pre>
+<pre class="cmd">--outputFormat</pre>
+<p>Argument : Format de sortie (format par défaut ou JSON)</p>
+<pre class="cmd">-d</pre>
+<pre class="cmd">--plainDMS</pre>
+<p>Avec cette option, les coordonnées en &quot;Degrés Minutes Secondes&quot; ou &quot;Degrés Minutes&quot; sont écrites de manière lisible avec les signes ° &#x27; &quot; (point et fichier). Dans les fichiers, les longitudes et les latitudes doivent alors être écrites sans espace si l’espace est le séparateur de champ (y compris les lettres de direction E,W,N,S). En l&#x27;absence de l&#x27;option, les coordonnées DMS ou DM sont écrites sous forme décimale (dd.mmsssss ou dd.mmmmm).</p>
+<pre class="cmd">-c</pre>
+<pre class="cmd">--processAsVector</pre>
+<p>Traiter en tant que vecteur (pour test seulement)</p>
+<pre class="cmd">-i</pre>
+<pre class="cmd">--sourceFrame</pre>
+<p>(obligatoire avec –getSourceGeodeticCRS)</p>
+</section><section class="page" id="p32">
+<h2 class="pg">Page 32</h2>
+<p>Service de Géodésie page 60082 8648 01 32/46 Nom court Nom long Description Argument : id des repères sources au format GeodeticFrameid.VerticalFrameid</p>
+<pre class="cmd">-I</pre>
+<pre class="cmd">--targetFrame</pre>
+<p>(obligatoire avec –getTargetGeodeticCRS) Argument : id des repères cibles au format GeodeticFrameid.VerticalFrameid</p>
+<h3 id="p32">4.3 Syntaxe</h3>
+<p>On donne ici la syntaxe avec les noms longs. L&#x27;ordre n&#x27;a pas d&#x27;importance sauf pour les coordonnées qui doivent être écrites après les options le cas échéant. Il faut bien écrire toute la commande sur une seule ligne.</p>
+<h4 id="p32">4.3.1 Afficher l&#x27;aide</h4>
+<pre class="cmd">circeFR --help</pre>
+<h4 id="p32">4.3.2 Afficher la liste des SRC disponibles</h4>
+<p>La liste des identifiants de SRC disponibles pour une version donnée est donnée par une commande :</p>
+<pre class="cmd">circeFR [-v] [-q] --metadataFile=metadataFilePathName --getCRSlist</pre>
+<p>Cette commande affiche la liste des identifiants des SRC géodésiques définis dans le fichier de métadonnées, puis des SRC verticaux, puis des SRC composés (c&#x27;est-à-dire des compositions de SRC géodésiques et verti- caux dont les zones de validité se croisent).</p>
+<h4 id="p32">4.3.3 Afficher la zone de validité d&#x27;un  SRC</h4>
+<pre class="cmd">circeFR [-v] [-q]</pre>
+<pre class="cmd">--metadataFile=metadataFilePathName --getValidityArea</pre>
+<pre class="cmd">--sourceCRS=SourceGeodeticCRSid.SourceVerticalCRSid</pre>
+<p>Circé affiche les zones de validité (emprise géographique) des SRC sources demandés ou d&#x27;un seul. Excep- tionnellement il est possible d&#x27;avoir la zone de validité d&#x27;un SRC vertical sans mettre le point avec la syn- taxe :</p>
+<pre class="cmd">--sourceCRS=SourceVerticalCRSid</pre>
+</section><section class="page" id="p33">
+<h2 class="pg">Page 33</h2>
+<p>Service de Géodésie page 60082 8648 01 33/46</p>
+<h4 id="p33">4.3.4 Lancer les tests</h4>
+<pre class="cmd">circeFR --runTest --sourcePathname=testFilePathName</pre>
+<pre class="cmd">L&#x27;option --sourcePathname sert ici à initialiser le chemin du fichier de commande contenant le nombre et</pre>
+<p>la liste des fichiers de test à traiter (sans l&#x27;extension txt). Ces derniers doivent être situés dans le même réper- toire. Exemple : Je lance Circé depuis un certain répertoire (espace de travail). J’ai un sous-répertoire coords_tests contenant le fichier de commande circe_test.txt. La ligne s’écrit :</p>
+<pre class="cmd">circeFR --runTest --sourcePathname=coords_tests\circe_test.txt</pre>
+<p>Le fichier circe_test.txt contient par exemple les lignes suivantes : 15 FR GUADANN_RGAF09 GUAD_W84_RGAF09 GUYA I08 KER MARTFD_RGAG09 MART_W84_RGAF09 MAY NC REU SMSB_FM_RGAF09 SMSB_W84_RGAF09 SPM TA Dans le même répertoire doivent se trouver 15 fichiers s’appelant FR.txt, GUADANN_RGAF09.txt, etc. Un fichier de test contient, pour une zone donnée, les coordonnées d&#x27;un ensemble de points exprimées suc- cessivement dans les SRC définis dans le fichier de métadonnées correspondant. Voici le schéma du format : &lt;texte descriptif&gt; &lt;fichier de métadonnées avec le sous-répertoire relatif à l’espace de travail&gt; &lt;fichier de limites de plaques tectoniques (facultatif)&gt; &lt;Nombre de SRC&gt; &lt;Nombre de points&gt; &lt;Ecart maximal attendu en millimètres&gt; &lt;définition des coordonnées dans le SRC 1 avec sourceCRS et sourceFormat&gt; &lt;nombre de points définis dans ce SRC&gt; &lt;id du point 1&gt; &lt;coordonnées selon le format&gt; &lt;id du point 2&gt; &lt;coordonnées selon le format&gt; etc. &lt;définition des coordonnées dans le SRC 2 avec sourceCRS et sourceFormat&gt; &lt;nombre de points définis dans ce SRC&gt; &lt;id du point 1&gt; &lt;coordonnées selon le format&gt; &lt;id du point 2&gt; &lt;coordonnées selon le format&gt; etc.</p>
+</section><section class="page" id="p34">
+<h2 class="pg">Page 34</h2>
+<p>Service de Géodésie page 60082 8648 01 34/46 Les tests consistent à effectuer toutes les opérations croisées menant d&#x27;un SRC à l&#x27;autre. Les résultats s’écrivent dans un fichier du type test....log. Le résultat de chaque transformation est écrit suivi de l&#x27;écart aux coordonnées de référence (ramené à des écarts est-ouest-hauteur-altitude en milli- mètres) seulement dans le cas où il est supérieur à l’écart maximal attendu en millimètres pour une coordon- née. Un message indique quand l&#x27;opération est impossible (dépassement des bornes etc.). La plupart des transformations et des conversions peuvent boucler en aller-retour avec un résidu inférieur au millimètre. Toutefois, on trouve certains résidus légèrement supérieurs au millimètre, c’est pourquoi on défi- nit l’écart maximal attendu en millimètres dans le fichier de test. Les résidus supérieurs sont alors écrits dans les fichiers log. Ces résidus sont a priori normaux, mais il pourrait être utile de les étudier. Le champ &lt;Ecart maximal attendu en millimètres&gt; permet de définir l’écart maximal constaté quand le test se déroule bien. Il faut lancer une première fois le test en mettant 1, puis mettre à jour le fichier avec l’écart maximal constaté. Cela permet, en cas de bug entraînant un résultat aberrant lors de développe- ments ultérieurs, d’afficher une alerte du type : **** shift (&lt;maxShift&gt;) larger than expected (&lt;largerExpectedShift&gt;) **** aussi bien à l’écran que dans le fichier log. Le champ &lt;fichier de limites de plaques tectoniques (facultatif)&gt; est obligatoire pour Circé Monde, car il permet à Circé de détecter sur quelle plaque se situe chaque point traité.</p>
+<h4 id="p34">4.3.5 Opérer sur de multiples  SRC</h4>
+<pre class="cmd">circeFR [-v] [-q] --multipleCRS --sourcePathname=testFilePathName</pre>
+<p>Il s’agit, à partir de coordonnées données dans un certain SRC, de calculer les coordonnées dans plusieurs autres SRC. Le fichier de commande est identique à celui décrit pour les tests automatiques. Ensuite, chaque fichier à traiter a le même format que celui décrit plus haut, avec ces différences : - Le champ &lt;Ecart maximal attendu en millimètres&gt; ne sert à rien puisqu’il n’y a pas de compa- raison à faire, mais il faut mettre une valeur numérique quelconque. - Seules les coordonnées du premier SRC sont utilisées. Pour les autres, seule la ligne de définition est obli- gatoire (mais les coordonnées éventuellement présentes comme pour un fichier de test ne gênent pas). Le fichier log obtenu peut servir de fichier de test.</p>
+</section><section class="page" id="p35">
+<h2 class="pg">Page 35</h2>
+<p>Service de Géodésie page 60082 8648 01 35/46</p>
+<h4 id="p35">4.3.6 Faire une opération sur un point</h4>
+<pre class="cmd">circeFR [-v] [-q]</pre>
+<pre class="cmd">--metadataFile=metadataFilePathName</pre>
+<pre class="cmd">--sourceCRS=SourceGeodeticCRSid.SourceVerticalCRSid</pre>
+<pre class="cmd">--sourceFormat=sourceFormatId.sourceLinearUnit.sourceAngularUnit</pre>
+<pre class="cmd">--targetCRS=TargetGeodeticCRSid.TargetVerticalCRSid</pre>
+<pre class="cmd">--targetFormat=targetFormatId.targetLinearUnit.targetAngularUnit</pre>
+<p>coord1 coord2 [coord3] Exemple (sur une seule ligne) :</p>
+<pre class="cmd">circeFR --metadataFile=&quot;C:\ProgramData\Circe52\data\DataFRnew.xml&quot;</pre>
+<pre class="cmd">--sourceCRS=NTFLAMB3. --sourceFormat=EN.METERS. --targetCRS=WGS84G.</pre>
+<pre class="cmd">--targetFormat=LP.METERS.DEGREES   470000 160000</pre>
+<h4 id="p35">4.3.7 Faire une opération sur un fichier</h4>
+<pre class="cmd">circeFR [-v] [-q]</pre>
+<pre class="cmd">--metadataFile=metadataFilePathName</pre>
+<pre class="cmd">--sourceCRS=SourceGeodeticCRSid.SourceVerticalCRSid</pre>
+<pre class="cmd">--sourceFormat=sourceFormatId.sourceLinearUnit.sourceAngularUnit</pre>
+<pre class="cmd">--targetCRS=TargetGeodeticCRSid.TargetVerticalCRSid</pre>
+<pre class="cmd">--targetFormat=targetFormatId.targetLinearUnit.targetAngularUnit</pre>
+<pre class="cmd">--sourcePathname=sourcePathname</pre>
+<pre class="cmd">--targetPathname=targetPathname</pre>
+<p>Exemple (sur une seule ligne) :</p>
+<pre class="cmd">circeFR --metadataFile=&quot;C:\ProgramData\Circe52\data\DataFRnew.xml&quot;</pre>
+<pre class="cmd">--sourceCRS=NTFLAMB3. --sourceFormat=EN.METERS.</pre>
+<pre class="cmd">--targetCRS=WGS84G. --targetFormat=LP.METERS.DEGREES</pre>
+<pre class="cmd">--sourcePathname=&quot;D:\circe_coord_tests\datafile.txt&quot;</pre>
+<pre class="cmd">--targetPathname=&quot;D:\circe_coord_tests\outfile.txt&quot;</pre>
+<h3 id="p35">4.4 Les formats de données</h3>
+<p>Outre les identifiants de Systèmes de Référence de Coordonnées, les données associées aux coordonnées sont regroupées sous la notion de format.</p>
+<pre class="cmd">Les options --sourceFormat et --targetFormat permettent d&#x27;initialiser les formats de données en</pre>
+<p>entrée et en sortie qui sont divisés en trois parties séparées par des points : * Les champs de données des formats de fichier ou de point. * L&#x27;unité de mesure linéaire. * L&#x27;unité de mesure angulaire.</p>
+</section><section class="page" id="p36">
+<h2 class="pg">Page 36</h2>
+<p>Service de Géodésie page 60082 8648 01 36/46</p>
+<pre class="cmd">En complément, le séparateur de champ des fichiers en entrée peut être défini avec l’option --separator.</pre>
+<p>Les valeurs possibles sont : Espace (défaut), Virgule, Point-virgule, Tabulation (en toutes lettres) ou un ca- ractère quelconque. A ces données viennent s’ajouter, le cas échéant, les époques source et cible initialisées par l’utilisation des</p>
+<pre class="cmd">options --sourceEpoch et --targetEpoch.</pre>
+<h4 id="p36">4.4.1 Les champs de données des formats</h4>
+<p>Dans les formats de données, chaque ligne contient les données d&#x27;un point : un éventuel identifiant et les coordonnées géocentriques, géographiques ou projetées. Chaque lettre du format est traitée indépendamment et correspond à un champ ce qui laisse une certaine souplesse dans l&#x27;ordre des champs (à condition que le format soit cohérent). De plus, il est possible d&#x27;introduire des lettres poubelles correspondant à des champs inutilisés. Les lettres définissant les formats basiques sont les suivantes. Lettre Signification I Identifiant X Première coordonnée géocentrique Y Deuxième coordonnée géocentrique Z Troisième coordonnée géocentrique L Longitude λ P Latitude φ H Hauteur ellipsoïdale E Easting N Northing V Altitude C Convergence des méridiens (uniquement en écriture) S Altération linéaire (uniquement en écriture) La cohérence impose que le format contienne une des chaînes de caractères : XYZ, LP, PL, EN, NE. Les autres champs peuvent être placés avant ou après. Exemples : LPHI : longitude, latitude, hauteur, identifiant. aIXYZ : champ poubelle, identifiant, coordonnées géocentriques. ENCS : easting, northing, convergence, altération (fichier cible).</p>
+</section><section class="page" id="p37">
+<h2 class="pg">Page 37</h2>
+<p>Service de Géodésie page 60082 8648 01 37/46</p>
+<h4 id="p37">4.4.2 Les unités de mesure</h4>
+<p>La liste des unités angulaires possibles est la suivante dans la version actuelle : radians, secondes, degrés, degrés minutes secondes, degrés minutes, grades. De plus, il n&#x27;y a qu&#x27;une seule unité de mesure linéaire, le mètre. Les identifiants correspondants sont : &quot;RADIANS&quot;,&quot;SECONDS&quot;,&quot;DEGREES&quot;,&quot;DMS&quot;,&quot;DM&quot;,&quot;GONS&quot;,&quot;METERS&quot;. Les unités angulaires sont celles des coordonnées géographiques (longitude, latitude) ainsi que celles de la convergence des méridiens associée à une projection cible. Il est possible de ne pas écrire l’unité de mesure linéaire dans la ligne de commande. Ecriture des coordonnées sexagésimales Outre les degrés décimaux, les coordonnées géographiques peuvent être écrites en unités sexagésimales : degrés minutes secondes (DMS) ou degrés minutes (DM). Les coordonnées en unités sexagésimales peuvent être écrites de deux manières, ainsi pour les DMS (et de manière équivalente pour les DM) : (a) soit sous forme décimale (dd.mmssssssss qui représente dd° mm&#x27; ss.sssss&quot;), (b) soit sous forme &quot;DMS en clair&quot; comme dans le fichier en sortie de l&#x27;exemple donné ci-dessous § 4.5.Exemple (e.g. 001°53&#x27;49.97152&quot;E, la lettre pouvant être devant, ou remplacée par un signe +-). Si ces coordonnées sont écrites dans un fichier et que le séparateur est l’espace, il ne peut pas y avoir d&#x27;es- pace dans une coordonnée, mais avec un autre séparateur, les espaces sont autorisés dans un champ. De même, en mode point de l&#x27;IHM, les coordonnées étant dans des widgets séparés, les espaces sont autorisés entre les symboles (°&#x27;&quot;NESW) et les chiffres. S’il s’agit de coordonnées en entrée, Circé détecte automatiquement de quelle forme il s&#x27;agit. En ce qui con- cerne les DMS écrits en sortie, avec l’option –plainDMS (qui correspond à &quot;Affichage/DMS en clair&quot; de l’IHM), les DMS sont écrites sous la forme (b), sinon sous la forme (a).</p>
+<h4 id="p37">4.4.3 Les époques</h4>
+<p>Rappelons qu’une époque peut être implicitement ou explicitement associée à un système 3D, par exemple une réalisation de l’ITRS ou d’ETRS89 figée à une époque donnée. Dans ce cas l’utilisateur n’a pas à initia- liser d’époque associée aux coordonnées exprimées dans ce système. En revanche, lorsque des coordonnées sont exprimées dans un système 4D (source et/ou cible), il est obliga- toire d’initialiser une époque. Son unité est l’année décimale. Par exemple, le 12 novembre 2019 est le jour</p>
+<h2>316 de cette année, en année décimale cela fait 2019.864 (316/365 = 0.864).</h2>
+</section><section class="page" id="p38">
+<h2 class="pg">Page 38</h2>
+<p>Service de Géodésie page 60082 8648 01 38/46</p>
+<h3 id="p38">4.5 Exemple</h3>
+<p>Prenons la ligne de commande suivante sur une seule ligne (voir plus loin la copie d’écran du même calcul réalisé avec l’IHM).</p>
+<pre class="cmd">circeFR --metadataFile=DataFRnew.txt --sourceCRS=RGF93G.</pre>
+<pre class="cmd">--sourceFormat=ILPH.METERS.DEGREES --targetCRS=RGF93G.AUTHORITATIVE</pre>
+<pre class="cmd">--targetFormat=ILPV.METERS.DMS --sourcePathname=FR_RGf93.geo</pre>
+<pre class="cmd">--targetPathname=FR_RGF93_alt.geo --plainDMS --displayPrecision=0.001</pre>
+<pre class="cmd">--gridLoading=BINARY</pre>
+<pre class="cmd">L’exécutable utilisé sera la ligne de commande en version française (circeFR) et les métadonnées géodé-</pre>
+<p>siques seront celles de la France continentale et de la Corse (--metadataFile=DataFRnew.txt, le nom du fichier étant éventuellement accompagné de son chemin complet). Le fichier en entrée Il est défini par les options suivantes : Option Description</p>
+<pre class="cmd">--sourceCRS=RGF93G.</pre>
+<p>Le Système de Référence de Coordonnées est le SRC géo- graphique associé au Système de Référence Géodésique RGF93. Il n’y a pas de Système de Référence Verticale.</p>
+<pre class="cmd">--sourceFormat=ILPH.METERS.DEGREES Les données sont au format : identifiant / longitude / lati-</pre>
+<p>tude / hauteur ellipsoïdale. L’unité des hauteurs est le mètre ; l’unité des longitudes et des latitudes est le degré décimal.</p>
+<pre class="cmd">--sourcePathname=FR_RGf93.geo</pre>
+<p>Chemin du fichier. Le contenu du fichier en entrée est le suivant ; le point 1 est sur le continent et le point 2 est en Corse. Pt1 1.89721431 45.25156414  56.523 Pt2 8.81357461 42.15616555 853.189 Le fichier en sortie Il est défini par les options suivantes : Option Description</p>
+<pre class="cmd">--targetCRS=RGF93G.AUTHORITATIVE</pre>
+<p>Le Système de Référence de Coordonnées est le SRC géo- graphique associé au Système de Référence Géodésique RGF93. Le Système de Référence Verticale n’est pas ex- plicité, son identifiant est remplacé par AUTHORITATIVE.</p>
+</section><section class="page" id="p39">
+<h2 class="pg">Page 39</h2>
+<p>Service de Géodésie page 60082 8648 01 39/46 Option Description</p>
+<pre class="cmd">--targetFormat=ILPV.METERS.DMS</pre>
+<p>Les données sont au format : identifiant / longitude / lati- tude / altitude. L’unité des altitudes est le mètre ; l’unité des longitudes et des latitudes est « degré minute se- conde ».</p>
+<pre class="cmd">--targetPathname=FR_RGF93_alt.geo</pre>
+<p>Chemin du fichier.</p>
+<pre class="cmd">--plainDMS</pre>
+<p>Les coordonnées en « degré minute seconde » seront écrites sous forme lisible avec les signes ° ’ &quot;.</p>
+<pre class="cmd">--displayPrecision=0.001</pre>
+<p>Il y aura 3 chiffres significatifs pour les hauteurs et l’équivalent pour les valeurs angulaires. Le contenu du fichier en sortie est le suivant. *!SOURCE: FR_RGf93.geo *!CODE: RGF93v2bG. *!REPERE GÉODÉSIQUE: RGF93 v2b *!COORDONNÉES: Géographiques *!ELLIPSOÏDE: GRS 1980 *!UNITÉ: Degrés *! *!CIBLE: *!CODE: RGF93v2bG.AUTHORITATIVE *!REPERE GÉODÉSIQUE: RGF93 v2b *!COORDONNÉES: Géographiques *!ELLIPSOÏDE: GRS 1980 *!UNITÉ: DMS *! *!id; Longitude; Latitude; H;  Dév. de la verticale eta (&quot;); Dév. de la verticale xi (&quot;); [ vert.info. ]; vert.prec.; Pt1  001°53&#x27;49.97152&quot;E  45°15&#x27;05.63090&quot;N    6.857  -5.4   -1.5 [ IGN69 via RAF20 ] &lt; 2 cm Pt2  008°48&#x27;48.86860&quot;E  42°09&#x27;22.19598&quot;N  804.175 -15.8  -13.1 [ IGN78 via RAC09 ] &lt; 5 cm Les lignes d’en-tête reprennent les éléments de définition de la source et de la cible de manière lisible. La dernière ligne d’en-tête liste les champs des lignes qui suivent, issues du calcul. Il y a d’abord les valeurs demandées, en l’occurrence l’identifiant, la longitude, la latitude et l’altitude. Ensuite [ vert.info ] signale qu’une information sur la transformation verticale sera donnée car le Système de Référence Verticale est AUTHORITATIVE. Enfin, la valeur de précision de la transformation verticale (vert.prec.) sera donnée. L’information sur la transformation verticale dépend de chaque point puisque Circé a déterminé quelle trans- formation verticale et quel référentiel vertical correspondent à chacun. Le premier point étant sur le conti- nent, son altitude est exprimée en IGN69 et est calculée à partir de la hauteur ellipsoïdale et de l’anomalie d’altitude interpolée dans la grille RAF20. Le deuxième point étant en Corse, son altitude est exprimée en IGN78 et utilise la grille RAC09. Enfin, la précision de la transformation verticale est « &lt; 5 cm ». N.B. Il n’y a pas de transformation géodésique (l’opération demandée est une conversion), aussi il n’y a pas ici d’indication de précision géodésique.</p>
+</section><section class="page" id="p40">
+<h2 class="pg">Page 40</h2>
+<p>Service de Géodésie page 60082 8648 01 40/46 Calcul interactif en mode fichier correspondant à l’exemple de ligne de commande.</p>
+<figure><img src="figures/fig-p40-221.png" alt="figure page 40"><figcaption>Figure — page 40</figcaption></figure>
+</section><section class="page" id="p41">
+<h2 class="pg">Page 41</h2>
+<p>Service de Géodésie page 60082 8648 01 41/46</p>
+<h2 id="p41">5 Utilisation de l&#x27;interface graphique</h2>
+<h3 id="p41">5.1 Présentation</h3>
+<p>L’interface graphique de Circé est d’apparence rudimentaire ; elle n’est pas faite pour se substituer aux logi- ciels de type Système d’Information Géographique mais doit fournir un accès fiable aux systèmes de réfé- rence, en particulier pour contrôler les résultats fournis par les autres logiciels ; sans oublier que peu de logi- ciels fournissent un tel accès complet aux références spatiales, au-delà des reprojections : les coordonnées tridimensionnelles, les altitudes, les époques et les modèles de vitesse. Néanmoins, quelques fonctionnalités adoucissent la rudesse de cette interface.  Il est possible de modifier les propriétés de la fenêtre de Circé afin de l’adapter à l’écran grâce à deux options du menu Affichage : Disposition horizontale / verticale et Zone de défilement, voir à ce sujet la partie « Options de menu » ci-dessous.  Quelques fonctionnalités facilitent la saisie des coordonnées à partir d’un fichier ; voir à ce pro- pos le paragraphe « Bon à savoir » ci-dessous. De plus, concernant le résultat, l’option Outils / Copier point cible permet de copier les coordonnées cibles dans le presse-papier. Enfin, il est possible de réaliser une nouvelle opération à partir de la cible grâce à l’option Outils / Intervertir source / cible.  Les fichiers d’option par territoire (circe_options_XX.xml) sont réécrits à chaque changement de zone ou à la fermeture de Circé ce qui permet en principe de retrouver les options dans l&#x27;état où on les a laissées. Enfin, il ne faut pas négliger le côté didactique de cette interface. Elle présente clairement les différents Systèmes de Référence de Coordonnées disponibles sur un territoire donné et lesquels sont accessibles par transformation à partir d’une source.</p>
+</section><section class="page" id="p42">
+<h2 class="pg">Page 42</h2>
+<p>Service de Géodésie page 60082 8648 01 42/46</p>
+<h3 id="p42">5.2 Ordre de renseignement des options</h3>
+<p>L&#x27;utilisateur devrait renseigner les options dans un certain ordre ; les numéros renvoient à la copie d’écran. (1) Le choix du mode point ou fichier se fait en cliquant sur l’onglet correspondant source ou cible. (2) Le SRC géodésique source sera toujours utilisé, cette case doit donc être cochée. (2a) La première liste déroulante permet de choisir le nom du référentiel géodésique source. Ce choix en- traîne le peuplement des autres listes déroulantes. (2b) La liste des SRC associés à ce référentiel contient alors : le SRC géocentrique (si le référentiel est 3D) ; le SRC géographique ; les SRC projetés. (3) Le choix du SRC entraîne à son tour le peuplement des formats possibles. (3a) En mode point, le SRC géocentrique est associé à un format avec ou sans identifiant6 (« XYZ » et « id XYZ ») ; le SRC géographique, à six formats (longitude, latitude ; avec ou sans coordonnée verticale, hau- teur ou altitude ; avec ou sans identifiant) ; de même pour un SRC projeté (est, nord …). En mode fichier, le nombre de formats géographiques et projetés est doublé car l’ordre des coordonnées peut être modifié. (3b) Les éléments varient en fonction du SRC et du format choisis. Si le système est 4D, il faut saisir l’époque en années décimales. Si le SRC est géographique, il faut choisir l’unité angulaire. (4) La case du SRC vertical est cochée automatiquement si le format contient l’altitude, et décochée sinon. (4a) Si le format contient l’altitude, il est obligatoire de choisir le SRC vertical. (4b) Cocher la case « Référentiels verticaux par défaut » laisse à Circé le choix du référentiel vertical perti- nent en fonction de la localisation de chaque point à traiter. Voir à ce sujet l’exemple traité ci-dessus. (5a) et (5b) En mode fichier, choisir l’emplacement et le nom des des fichiers source et cible. (6) En mode point, saisir les coordonnées. Voir à ce propos le paragraphe « Bon à savoir » ci-dessous. (7) à (9) Les choix pour la cible sont quasiment les mêmes que pour (2) à (4) avec les nuances suivantes. (7a) et (9a) Les listes des référentiels géodésiques et verticaux cibles sont restreintes aux référentiels attei- gnables par transformation à partir des référentiels sources choisis. (8b) L’unité angulaire sera celle de la convergence des méridiens, le cas échéant. (10) Pour lancer un calcul, cliquez sur le bouton Calculer . (11) Affichage du résultat en mode point. (12) Peuplement des transformations concernant les repères liés aux SRC choisis, en tant que source ou cible. L&#x27;utilisateur peut choisir une transformation si le choix existe (ce n’est généralement pas le cas). (13) Affichages divers. Voir à ce propos le paragraphe « Affichage au bas de l’interface » ci-dessous. 6 La présence d’un identifiant en mode point est justifiée par le passage du mode fichier au mode point. Voir à ce propos le paragraphe « Bon à savoir » ci-dessous.</p>
+</section><section class="page" id="p43">
+<h2 class="pg">Page 43</h2>
+<p>Service de Géodésie page 60082 8648 01 43/46</p>
+<figure><img src="figures/fig-p43-225.png" alt="figure page 43"><figcaption>Figure — page 43</figcaption></figure>
+</section><section class="page" id="p44">
+<h2 class="pg">Page 44</h2>
+<p>Service de Géodésie page 60082 8648 01 44/46</p>
+<h3 id="p44">5.3 Options de menu</h3>
+<p>Menu Option Description Zone Une option par terri- toire Choix du territoire de travail. Ce menu est caché s’il y a une seule zone. Affichage Disposition horizontale / verticale Change la disposition générale de Circé d’horizontal en vertical et vice-versa ; nécessite de redémarrer Circé. La disposition horizon- tale est préférable sur les petits écrans (voir aussi l’option Zone de défilement). Afficher les emprises géographiques Affiche les emprises géographiques sous les repères sélectionnés, dans la même unité que les coordonnées géographiques (donc modi- fiable). Il est possible que les emprises soient affichées en radians. Afficher plus de résul- tats Affiche la convergence et l’altération linéaire (ppm) associées à la projection cible (point et fichier). DMS en clair Si cette option est cochée, les coordonnées “Degré Minute Seconde” sont lues et écrites sous forme lisible avec ° ’ &quot; (point et fichier). Sinon, elles sont écrites comme des valeurs décimales (dd.mmsssss). Dans les fichiers, les longitudes et les latitudes en DMS sont écrites sans aucun espace (y compris pour la lettre de direction E,W,N,S). De même pour les “Degré Minute” (DM). Zone de défilement Affiche l’IHM avec une zone de défilement verticale (ascenseur) ; nécessite de redémarrer Circé (voir aussi l’option Disposition). Outils Copier les options de la ligne de commande Copie les options de la ligne de commande (telles qu’écrites au bas de l’IHM) dans le presse-papier. Effacer les coordonnées Efface les coordonnées de l’interface avant un copier/coller. Intervertir source / cible Copie les paramètres et les coordonnées sources dans la cible et réciproquement. Copier point cible Copie les coordonnées cibles dans le presse-papier. Il s’agit des coordonnées géocentriques, géographiques et projetées, accompa- gnées par une coordonnée verticale le cas échéant. Note 1 : Ces coordonnées sont issues du calcul effectif, même si</p>
+</section><section class="page" id="p45">
+<h2 class="pg">Page 45</h2>
+<p>Service de Géodésie page 60082 8648 01 45/46 l’utilisateur n’a pas cliqué sur le bouton Calculer. Note 2 : Les coordonnées géocentriques ou projetées peuvent être nulles si elles ne sont pas demandées par l’utilisateur (Circé ne choi- sit pas à la place de l’utilisateur). En revanche, les coordonnées géo- graphiques sont toujours calculées, ne serait-ce que pour valider leur position dans l’emprise du SRC. Utiliser les référentiels verticaux par défaut Si cette option est cochée, l’IHM contient la case à cocher « Réfé- rentiels verticaux par défaut » si le format contient l’altitude. Si cette case est cochée à son tour, Circé choisira automatiquement le repère vertical pertinent à chaque point traité. Séparateur Choisir un séparateur de champ si ce n’est pas l’espace. Cette option est éditable : il est possible de saisir un caractère non prédéfini comme séparateur de champ. Des espaces consécutifs équivalent à un seul, mais pour les autres, deux séparateurs consécutifs signalent un champ vide. Aide Documentation Ouvre la documentation géodésique par territoire. Manuel utilisateur Ouvre le manuel utilisateur (ce document). A propos Affiche une présentation de Circé.</p>
+<h3 id="p45">5.4 Lien avec la ligne de commande</h3>
+<p>Les options de Circé (ligne de commande) s&#x27;écrivent en bas de l&#x27;interface. La seule différence entre les versions ligne de commande et graphique est l&#x27;IHM. Les traitements effectués sont absolument les mêmes. Toutefois, la ligne de commande donne accès à plus de possibilités (avec toutes</p>
+<pre class="cmd">les options en --get....) :</pre>
+<pre class="cmd">- les options –getCRSlist, --getValidityArea, --runTest, --multipleCRS, --gridLoading, --</pre>
+<p>followUpTransfos etc. - la liste des formats est limitée dans la version graphique tandis qu&#x27;elle est assez ouverte avec la ligne de commande.</p>
+</section><section class="page" id="p46">
+<h2 class="pg">Page 46</h2>
+<p>Service de Géodésie page 60082 8648 01 46/46</p>
+<h3 id="p46">5.5 Affichage au bas de l’interface</h3>
+<p>Diverses informations s’affichent en bas de l’interface en fonction du contexte.  La ligne de commande est affichée sur fond gris en cours de saisie des paramètres et des coordon- nées.  Quand un calcul est lancé et que certaines étapes sont longues (écriture d’une grille au format bi- naire ; traitement d’un fichier de points), un état d’avancement est affiché sur fond cyan.  Quand un traitement se termine correctement, les valeurs de précision des transformations sont don- nées sur fond vert.  En cas d’échec, le message d’erreur est affiché sur fond rouge.</p>
+<h3 id="p46">5.6 Bon à savoir</h3>
+<p>Si les coordonnées de départ sont déjà écrites dans un fichier, il est possible de ne pas les saisir à nouveau, même en mode point :  Si un fichier source est sélectionné et que l’utilisateur passe en mode point, le premier point du fi- chier est affiché et il est possible de sélectionner un autre point en saisissant son identifiant. Pour ce- la, le contenu du fichier est chargé en mémoire, ce qui induit un temps de latence au changement d’onglet si le fichier est volumineux.  En commençant par effacer les valeurs affichées dans l’interface par l’option Effacer les coordon- nées (Ctrl+E), puis copier l’ensemble des coordonnées (séparées par des espaces) correspondant au format source défini dans Circé, il suffit de les coller dans une des cases correspondantes. Elles se positionneront dans les bonnes cases, en un seul copier-coller (ou glisser-déposer). L’exception est le format DMS ou DM, car chaque coordonnée peut contenir des espaces. Il faut alors copier-coller chaque coordonnée séparément. L&#x27;écriture des coordonnées au format DMS (degrés minutes secondes) est assez permissive. Voici des exemples d&#x27;écriture qui donneront toutes le même résultat c&#x27;est-à-dire la première écriture de la liste (vérifiez dans la ligne de commande) : -55.4409977 ;  055°44&#x27;09.97&quot; W ;  -055°44&#x27;09.97&quot; ; W 055°44&#x27;09.97&quot; ;  055 44</p>
+<h3>09.97 W ; etc.</h3>
+</section>
+</main>
+</body>
+</html>

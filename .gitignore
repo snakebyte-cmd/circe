@@ -1,3 +1,6 @@
 build/
 .DS_Store
 assets/*/Data*new.xml
+
+# conversion PDF intermediaire (pdftohtml)
+doc/manuel-brut*
