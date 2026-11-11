@@ -1,3 +1,20 @@
+/***********************************************************************
+
+This file is part of the Circé project source files.
+
+Copyright:
+
+    Institut National de l'Information Géographique et Forestière (IGNF)
+
+    This file was modified in the local fork of IGNF/circe
+    (see BUILD.md, section "Licence et modifications").
+
+    Circé is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation, either version 3 of the License,
+    or (at your option) any later version.
+
+***********************************************************************/
 #include "circe_ogr.h"
 #include "../../circelib/circe.h"
 #include "../../circelib/stringtools.h"

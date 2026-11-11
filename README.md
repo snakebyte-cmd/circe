@@ -30,8 +30,11 @@
 > # RedHat/RHEL 9 : voir BUILD.md §5  (dnf install qt5-qtbase-devel gdal-devel, qmake-qt5, scripts/install-cli-linux.sh)
 > ```
 >
-> Patchs de ce fork (4 commits) : chemins GDAL portables via `gdal-config`, compatibilité
-> GDAL 3.x, correction d'un `#include`. Publication possible sur CodeBerg : BUILD.md §7.
+> Patchs de ce fork (branche `local-macos-gdal`) : chemins GDAL portables via `gdal-config`,
+> compatibilité GDAL 3.x, correction d'un `#include`, scripts et doc.
+> **Licence : GPL-3.0 inchangée** (voir `LICENSE` et BUILD.md §10) — les modifications de ce
+> fork sont distribuées sous la même licence, avec notices de copyright conservées.
+> Publication possible sur CodeBerg : BUILD.md §7.
 
 ## PURPOSE OF THE SOFTWARE
 

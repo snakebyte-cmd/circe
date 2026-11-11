@@ -1,5 +1,6 @@
 #!/bin/sh
 # install-cli-linux.sh — installe les commandes `circe` et `circe-plain` dans /usr/local/bin
+# Ce fichier fait partie du fork local de IGNF/circe, distribué sous GPL-3.0 (voir LICENSE).
 # (RedHat/RHEL, Debian, etc. — /usr/local/bin est dans le PATH par défaut).
 # Nécessite les droits root (sudo) pour écrire dans /usr/local/bin.
 #

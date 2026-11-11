@@ -1,5 +1,6 @@
 #!/bin/sh
 # install-cli-macos.sh — installe les commandes `circe` et `circe-plain` dans /opt/homebrew/bin
+# Ce fichier fait partie du fork local de IGNF/circe, distribué sous GPL-3.0 (voir LICENSE).
 # (déjà dans le PATH sur macOS Apple Silicon). Aucun sudo requis.
 #
 # `circe`       -> CLI compilé AVEC GDAL   (build/qt_cmd_gdal/circeFR)

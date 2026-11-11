@@ -1,5 +1,6 @@
 #!/bin/sh
 # build-macos.sh — compile Circé 5 (CLI + GUI, avec et sans GDAL) sur macOS (Apple Silicon)
+# Ce fichier fait partie du fork local de IGNF/circe, distribué sous GPL-3.0 (voir LICENSE).
 # et prépare les bundles .app (plugins Qt copiés + re-signature ad-hoc pour Gatekeeper).
 #
 # Prérequis :

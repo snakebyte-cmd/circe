@@ -309,7 +309,24 @@ git rebase upstream/main      # ou merge ; résoudre les conflits si upstream to
 - après un changement de flags qmake : supprimer `Makefile`, `.qmake.stash` **et la cible** avant `make`
 - `make ... | tail; echo $?` renvoie le code de `tail` → rediriger la sortie dans un fichier
 
-## 10. Références
+## 10. Licence et modifications (GPL-3.0)
+
+- Le projet upstream est distribué sous **GPL-3.0** (`LICENSE`, inchangé dans ce fork).
+- Ce fork ajoute des modifications sur la branche `local-macos-gdal` (voir §3 et
+  `git log 0bc8772..HEAD`) : patchs de build (qmake `.pro`), compatibilité GDAL 3.x,
+  correction d'un `#include`, scripts `scripts/*.sh`, documentation (`BUILD.md`,
+  section added to `README.md`). **L'ensemble reste distribué sous GPL-3.0** :
+  - `LICENSE` conservé tel quel ;
+  - les notices de copyright des fichiers modifiés sont conservées (aucune supprimée) ;
+  - les nouveaux fichiers portent une mention GPL-3.0 en en-tête ;
+  - l'historique git conserve la trace de chaque modification (GPLv3 §4/§5 : distribuer
+    les sources des versions modifiées sous la même licence, en indiquant les changements).
+- Dépendances : **compatibles GPL-3.0** — GDAL (licence MIT/X11, lien dynamique uniquement,
+  non redistribué), Qt 5 (LGPL-3.0, lien dynamique), tinyxml2 embarqué (zlib). Aucune
+  bibliothèque tierce n'est embarquée dans ce dépôt.
+- Aucune clause additionnelle ("additional terms", GPLv3 §7) n'est ajoutée.
+
+## 11. Références
 
 - Dépôt upstream : https://github.com/IGNF/circe
 - Site IGN (installateurs officiels, manuel) : https://geodesie.ign.fr (page Circé v5)
