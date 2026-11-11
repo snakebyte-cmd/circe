@@ -280,15 +280,27 @@ circe -l
 CIRCE_ZONE=CirceGUY circe -l            # autres zones, idem macOS
 ```
 
-## 7. Publier ce fork sur CodeBerg
+## 7. Publier ce fork sur GitHub (SSH)
+
+Prérequis :
+1. Compte GitHub + clé SSH publique enregistrée (Settings > SSH and GPG keys).
+   La paire de clés se génère **localement** (GitHub ne voit jamais la privée) :
+   `ssh-keygen -t ed25519 -C "github"` (une clé existante, ex. `~/.ssh/id_ed25519`, convient aussi).
+   Copier le contenu de `~/.ssh/id_ed25519.pub` dans GitHub. Tester : `ssh -T git@github.com`.
+2. Créer le dépôt vide sur github.com (New repository, ex. `circe`, sans README/LICENSE auto).
 
 ```sh
-# 1. créer le dépôt vide sur https://codeberg.org (interface web)
-# 2. pousser la branche de travail (patchs + doc) :
-git remote add codeberg https://codeberg.org/<ton-user>/circe.git
-git push -u codeberg local-macos-gdal
-# 3. et éventuellement la branche principale : git push codeberg main
+git remote add github git@github.com:<ton-user>/circe.git
+git push -u github local-macos-gdal    # branche de travail (patchs + doc)
+git push github main                    # branche principale, si souhaitée
 ```
+
+Notes :
+- GPG **optionnel** (signer les commits, badge « Verified ») : `brew install gnupg`,
+  `gpg --full-gen-key`, uploader la clé publique (Settings > SSH and GPG keys > New GPG key),
+  puis `git config --global user.signingkey <ID>` et `git config --global commit.gpgsign true`.
+- Alternative sans SSH : remote en HTTPS + Personal Access Token (Settings > Developer settings).
+- Ancienne procédure CodeBerg (remplacée) : `git remote add codeberg https://codeberg.org/<user>/circe.git`.
 
 ## 8. Mettre à jour le fork (nouvelles versions upstream)
 
