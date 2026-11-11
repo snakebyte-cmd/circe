@@ -310,10 +310,13 @@ git config --global user.signingkey "$KEYID"
 git config --global commit.gpgsign true
 git config --global gpg.program /opt/homebrew/bin/gpg
 gpg --armor --export "$KEYID" > ~/.ssh/cle-gpg-pub.asc   # fichier propre pour upload
-# copier le bloc dans GitHub > Settings > SSH and GPG keys > New GPG key
-# (ou via CLI : gh gpg-key add ~/.ssh/cle-gpg-pub.asc — recommandé)
-# Note : la clé doit avoir la capacité certify+sign ([SC]) ; un 'sign' seul est rejeté par GitHub.
-# L'email de la clé doit être un email vérifié du compte GitHub pour le badge « Verified ».
+# NE PAS recopier le bloc à la main depuis le terminal (risque de tronquer/altérer l'armor → HTTP 422).
+# Upload recommandé via CLI :  gh auth login  puis  gh gpg-key add ~/.ssh/cle-gpg-pub.asc
+# Notes :
+# - la clé doit avoir la capacité certify+sign ([SC]) ; un 'sign' seul est rejeté par GitHub ;
+# - l'email de la clé doit être un email vérifié du compte GitHub pour le badge « Verified » ;
+# - en cas d'erreur HTTP 422 « not a valid GPG key », régénérer le fichier avec la commande ci-dessus
+#   (export direct, pas de copier-coller) et réessayer.
 # re-signer tout l'historique du fork :  git rebase --exec 'git commit --amend --no-edit' 0bc8772..HEAD
 ```
 
