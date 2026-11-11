@@ -119,7 +119,32 @@ Pièges :
 - `make ... | tail; echo $?` renvoie le code de `tail`, pas de `make` → rediriger la sortie
   dans un fichier et tester `$?` directement.
 
-### 4.3 Tests (depuis `assets/CirceFR`)
+### 4.3 Commande `circe` accessible de partout (macOS)
+
+Au lieu d'un alias dans `.zshrc`, on installe un **wrapper** dans `/opt/homebrew/bin`
+(déjà dans le PATH) — plus propre et découvrable :
+
+```sh
+./scripts/install-cli-macos.sh
+# installe :
+#   circe        -> CLI avec GDAL    (build/qt_cmd_gdal/circeFR)
+#   circe-plain  -> CLI sans GDAL    (build/qt_cmd/circeFR)
+```
+
+Le wrapper se place automatiquement dans le dossier des données du territoire
+(`assets/$CIRCE_ZONE`, défaut `CirceFR`) et injecte `-m DataFRnew.txt` si absent.
+
+Exemples, depuis n'importe quel répertoire :
+
+```sh
+circe -l                                                          # liste des CRS (zone France)
+CIRCE_ZONE=CirceANT circe -l                                      # autre zone (si assets téléchargés)
+circe -s RGF93v2bG. -f LP.METERS.DEGREES -S NTFLAMB2E. -F EN.METERS. 2.337229 48.856614
+# -> 600051.756  2428697.028   < 5 cm
+circe -h                                                          # aide complète
+```
+
+### 4.4 Tests (depuis `assets/CirceFR`)
 
 ```sh
 C=../../build/qt_cmd/circeFR
@@ -138,7 +163,7 @@ EOF
 
 Résultats obtenus : conformes (point et fichier GeoJSON, précision < 5 cm).
 
-### 4.4 Lancer la GUI sur macOS (Gatekeeper + plugins Qt)
+### 4.5 Lancer la GUI sur macOS (Gatekeeper + plugins Qt)
 
 `make` ne déploie pas les plugins Qt dans le `.app` et laisse une signature ad-hoc
 incomplète → macOS affiche « impossible d'ouvrir ». `scripts/build-macos.sh` corrige
