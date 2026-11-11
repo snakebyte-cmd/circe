@@ -29,7 +29,8 @@ DATA="\$CIRCE_HOME/assets/\$ZONE"
 cd "\$DATA" || exit 1
 has_m=0
 for a in "\$@"; do case "\$a" in -m|--metadataFile|--metadataFile=*|-m*) has_m=1;; esac; done
-[ "\$has_m" = 0 ] && set -- -m DataFRnew.txt "\$@"
+# fichier de métadonnées de la zone : Data<ZONE sans 'Circe'>new.txt (ex. DataFRnew.txt, DataGUYnew.txt)
+[ "\$has_m" = 0 ] && set -- -m "Data\${ZONE#Circe}new.txt" "\$@"
 exec "\$BIN" "\$@"
 EOF
     chmod +x "$BINDIR/$name"

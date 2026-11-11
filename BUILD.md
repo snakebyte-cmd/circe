@@ -144,6 +144,24 @@ circe -s RGF93v2bG. -f LP.METERS.DEGREES -S NTFLAMB2E. -F EN.METERS. 2.337229 48
 circe -h                                                          # aide complète
 ```
 
+### 4.3b Autres territoires (zones)
+
+Chaque territoire a son dossier `assets/CirceXXX` et son fichier de métadonnées
+`DataXXXnew.txt`. Le wrapper choisit automatiquement le bon fichier d'après la zone.
+Pour utiliser une zone, télécharge d'abord ses données puis lance avec `CIRCE_ZONE` :
+
+```sh
+git sparse-checkout add assets/CirceGUY          # ex. Guyane
+CIRCE_ZONE=CirceGUY circe -l                     # liste les CRS de la zone
+# Guyane : RGFG95 / RGFG95G (géodésique), RGFG95UTM22 (projection),
+#          GUYA77 = NGG 1977 Guyane (vertical)
+CIRCE_ZONE=CirceGUY circe -s RGFG95G.GUYA77 -f LP.METERS.DEGREES -S RGFG95UTM22.GUYA77 -F EN.METERS. -52.3333 4.9333
+# Cayenne -> UTM22 : 352169.812  545439.325
+```
+
+Zones disponibles : CirceANT, CirceFR, CirceGUY, CirceKER, CirceMAY, CirceREU, CirceSPM, CirceTA.
+Note : la précision verticale en Guyane est de 5/10 cm (grille ggguy15), contre < 5 cm en métropole.
+
 ### 4.4 Tests (depuis `assets/CirceFR`)
 
 ```sh
