@@ -280,27 +280,48 @@ circe -l
 CIRCE_ZONE=CirceGUY circe -l            # autres zones, idem macOS
 ```
 
-## 7. Publier ce fork sur GitHub (SSH)
+## 7. Publier ce fork sur GitHub (SSH + commits signés GPG)
 
-Prérequis :
-1. Compte GitHub + clé SSH publique enregistrée (Settings > SSH and GPG keys).
-   La paire de clés se génère **localement** (GitHub ne voit jamais la privée) :
-   `ssh-keygen -t ed25519 -C "github"` (une clé existante, ex. `~/.ssh/id_ed25519`, convient aussi).
-   Copier le contenu de `~/.ssh/id_ed25519.pub` dans GitHub. Tester : `ssh -T git@github.com`.
-2. Créer le dépôt vide sur github.com (New repository, ex. `circe`, sans README/LICENSE auto).
+### 7.1 Clé SSH dédiée (générée localement — GitHub ne voit jamais la clé privée)
 
 ```sh
-git remote add github git@github.com:<ton-user>/circe.git
-git push -u github local-macos-gdal    # branche de travail (patchs + doc)
-git push github main                    # branche principale, si souhaitée
+ssh-keygen -t ed25519 -C "github" -N "" -f ~/.ssh/id_ed25519_github
+# ~/.ssh/config :
+#   Host github.com
+#     IdentityFile ~/.ssh/id_ed25519_github
+#     IdentitiesOnly yes
+cat ~/.ssh/id_ed25519_github.pub     # copier dans GitHub > Settings > SSH and GPG keys > New SSH key
+ssh -T git@github.com                # -> "Hi <user>! You've successfully authenticated..."
 ```
 
-Notes :
-- GPG **optionnel** (signer les commits, badge « Verified ») : `brew install gnupg`,
-  `gpg --full-gen-key`, uploader la clé publique (Settings > SSH and GPG keys > New GPG key),
-  puis `git config --global user.signingkey <ID>` et `git config --global commit.gpgsign true`.
-- Alternative sans SSH : remote en HTTPS + Personal Access Token (Settings > Developer settings).
-- Ancienne procédure CodeBerg (remplacée) : `git remote add codeberg https://codeberg.org/<user>/circe.git`.
+### 7.2 Clé GPG pour signer les commits (badge « Verified » sur GitHub)
+
+```sh
+brew install gnupg
+export PATH=/opt/homebrew/bin:$PATH
+gpg --batch --pinentry-mode loopback --passphrase '' \
+    --quick-gen-key 'Snake Byte <snakebyte@nestedshell.local>' rsa4096 sign never
+KEYID=$(gpg --list-secret-keys --with-colons | awk -F: '/^sec/{print $5; exit}')
+git config --global user.signingkey "$KEYID"
+git config --global commit.gpgsign true
+git config --global gpg.program /opt/homebrew/bin/gpg
+gpg --armor --export "$KEYID"        # copier dans GitHub > Settings > SSH and GPG keys > New GPG key
+# re-signer tout l'historique du fork :  git rebase --exec 'git commit --amend --no-edit' 0bc8772..HEAD
+```
+
+Note : pour le badge « Verified », l'email de la clé GPG doit être un email **vérifié** du compte GitHub.
+
+### 7.3 Créer le dépôt et pousser
+
+```sh
+# sur github.com : New repository "circe" (vide, sans README/LICENSE auto)
+git remote add github git@github.com:snakebyte-cmd/circe.git   # déjà fait ici
+git push -u github local-macos-gdal    # branche de travail (patchs + doc + scripts)
+git push github main                   # branche principale, si souhaitée
+```
+
+Alternative sans SSH : remote HTTPS + Personal Access Token (Settings > Developer settings).
+Ancienne procédure CodeBerg (remplacée) : remote `https://codeberg.org/<user>/circe.git`.
 
 ## 8. Mettre à jour le fork (nouvelles versions upstream)
 
