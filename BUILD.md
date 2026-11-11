@@ -129,6 +129,40 @@ EOF
 
 Résultats obtenus : conformes (point et fichier GeoJSON, précision < 5 cm).
 
+### 4.4 Lancer la GUI sur macOS (Gatekeeper + plugins Qt)
+
+`make` ne déploie pas les plugins Qt dans le `.app` et laisse une signature ad-hoc
+incomplète → macOS affiche « impossible d'ouvrir ». Corriger :
+
+```sh
+export PATH=/opt/homebrew/opt/qt@5/bin:$PATH
+for APP in build/qt_gui/circeWidget.app build/qt_gui_gdal/circeWidget.app; do
+  cd "$APP/Contents"
+  mkdir -p PlugIns/platforms PlugIns/imageformats PlugIns/styles
+  cp /opt/homebrew/opt/qt@5/plugins/platforms/libqcocoa.dylib PlugIns/platforms/
+  cp /opt/homebrew/opt/qt@5/plugins/imageformats/*.dylib PlugIns/imageformats/
+  cp /opt/homebrew/opt/qt@5/plugins/styles/*.dylib PlugIns/styles/
+  codesign --force --deep -s - "../.."/"$(basename $APP)"   # re-signe le bundle (scelle les ressources)
+  cd - >/dev/null
+done
+```
+
+(Alternative à la copie manuelle : `macdeployqt circeWidget.app`, mais il embarque aussi
+toutes les dépendances conda de GDAL — lourd. La copie des seuls plugins Qt suffit,
+libgdal reste résolue via le rpath conda.)
+
+Lancement (toujours depuis le dossier des données) :
+
+```sh
+cd /Users/snakebyte/Python/circe/assets/CirceFR
+open ../../build/qt_gui_gdal/circeWidget.app
+```
+
+Si macOS affiche encore un avertissement : clic droit sur l'app > « Ouvrir », ou
+Réglages système > Confidentialité et sécurité > « Ouvrir quand même ».
+Vérification sans écran : `QT_QPA_PLATFORM=offscreen timeout 8 <app>/Contents/MacOS/circeWidget`
+doit afficher un warning Qt puis tourner (tué par le timeout).
+
 ## 5. RedHat / RHEL / Rocky Linux 9
 
 ### 5.1 Paquets (root)
