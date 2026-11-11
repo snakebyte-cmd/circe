@@ -292,6 +292,10 @@ ssh-keygen -t ed25519 -C "github" -N "" -f ~/.ssh/id_ed25519_github
 #     IdentitiesOnly yes
 cat ~/.ssh/id_ed25519_github.pub     # copier dans GitHub > Settings > SSH and GPG keys > New SSH key
 ssh -T git@github.com                # -> "Hi <user>! You've successfully authenticated..."
+# Méthode la plus fiable (évite les erreurs de copier-coller) : GitHub CLI
+#   brew install gh && gh auth login
+#   gh ssh-key add ~/.ssh/id_ed25519_github.pub -t "MacBook circe"
+#   gh gpg-key add ~/.ssh/cle-gpg-pub.asc
 ```
 
 ### 7.2 Clé GPG pour signer les commits (badge « Verified » sur GitHub)
@@ -305,7 +309,11 @@ KEYID=$(gpg --list-secret-keys --with-colons | awk -F: '/^sec/{print $5; exit}')
 git config --global user.signingkey "$KEYID"
 git config --global commit.gpgsign true
 git config --global gpg.program /opt/homebrew/bin/gpg
-gpg --armor --export "$KEYID"        # copier dans GitHub > Settings > SSH and GPG keys > New GPG key
+gpg --armor --export "$KEYID" > ~/.ssh/cle-gpg-pub.asc   # fichier propre pour upload
+# copier le bloc dans GitHub > Settings > SSH and GPG keys > New GPG key
+# (ou via CLI : gh gpg-key add ~/.ssh/cle-gpg-pub.asc — recommandé)
+# Note : la clé doit avoir la capacité certify+sign ([SC]) ; un 'sign' seul est rejeté par GitHub.
+# L'email de la clé doit être un email vérifié du compte GitHub pour le badge « Verified ».
 # re-signer tout l'historique du fork :  git rebase --exec 'git commit --amend --no-edit' 0bc8772..HEAD
 ```
 
